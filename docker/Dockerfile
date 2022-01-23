@@ -1,0 +1,17 @@
+FROM openjdk:17-jdk-alpine3.14 AS builder
+COPY . /nobody
+ADD ../start.sh /start.sh
+RUN chown nobody -R /nobody
+RUN mkdir /.gradle
+RUN chown nobody -R /.gradle
+RUN mkdir /output
+RUN chown nobody -R /output
+WORKDIR /nobody
+RUN apk add bash --no-cache
+USER nobody
+RUN /nobody/gradlew bootJar
+
+
+FROM openjdk:17-jdk-alpine3.14
+COPY --from=builder /nobody/build/libs/app.jar /
+CMD ["java", "-jar", "app.jar"]
