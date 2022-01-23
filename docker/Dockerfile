@@ -1,6 +1,5 @@
 FROM openjdk:17-jdk-alpine3.14 AS builder
 COPY . /nobody
-ADD ../start.sh /start.sh
 RUN chown nobody -R /nobody
 RUN mkdir /.gradle
 RUN chown nobody -R /.gradle
