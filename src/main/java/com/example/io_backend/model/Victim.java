@@ -12,13 +12,14 @@ import javax.persistence.*;
 public class Victim {
     @Id
     @Column(name = "id", nullable = false)
+    @GeneratedValue
     private Long id;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "firstname")
+    private String firstName;
 
-    @Column(name = "surname")
-    private String surname;
+    @Column(name = "lastname")
+    private String lastName;
 
     @Column(name = "document_name")
     private String documentName;

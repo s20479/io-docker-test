@@ -15,6 +15,7 @@ import java.util.Set;
 public class AccidentReport {
     @Id
     @Column(name = "id", nullable = false)
+    @GeneratedValue
     private Long id;
 
     @Column(name = "danger_rating")

@@ -13,6 +13,7 @@ import java.util.Date;
 public class EquipmentLog {
     @Id
     @Column(name = "id", nullable = false)
+    @GeneratedValue
     private Long id;
 
     @ManyToOne
@@ -34,9 +35,8 @@ public class EquipmentLog {
     @Column(name = "starting_amount")
     private Double startingAmount;
 
-    @Temporal(TemporalType.DATE)
     @Column(name = "current_amount")
-    private Date currentAmount;
+    private Double currentAmount;
 
     @Column(name = "measurement")
     private String measurement;

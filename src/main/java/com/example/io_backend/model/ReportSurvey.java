@@ -1,5 +1,6 @@
 package com.example.io_backend.model;
 
+import com.example.io_backend.model.enums.BloodType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,13 +15,14 @@ import java.util.List;
 public class ReportSurvey {
     @Id
     @Column(name = "id", nullable = false)
+    @GeneratedValue
     private Long id;
 
     @Column(name = "victim_breathing")
     private Boolean victimBreathing;
 
     @Column(name = "victim_conscious")
-    private String victimConscious;
+    private Boolean victimConscious;
 
     @Column(name = "description")
     private String description;
