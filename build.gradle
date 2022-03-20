@@ -16,6 +16,18 @@ application {
 	mainClass = "com.example.io_backend.IoBackendApplication"
 }
 
+run.doFirst {
+	try(final inputStream = new FileInputStream("environment.properties")) {
+		final prop = new Properties()
+
+		prop.load(inputStream)
+
+		prop.forEach { key, value ->
+			environment key, value
+		}
+	}
+}
+
 bootJar {
 	archiveFileName = 'app.jar'
 }
@@ -37,6 +49,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation group: 'org.hsqldb', name: 'hsqldb', version: '2.6.1'
 
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'mysql:mysql-connector-java'

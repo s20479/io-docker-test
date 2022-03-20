@@ -26,7 +26,7 @@ public class Facility {
     private FacilityType facilityType;
 
     @ElementCollection
-    @Column(name = "set")
+    @Column(name = "set_")
     @CollectionTable(name = "facility_set", joinColumns = @JoinColumn(name = "owner_id"))
     private Set<String> set = new LinkedHashSet<>();
 
