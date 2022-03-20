@@ -1,5 +1,6 @@
 package com.example.io_backend.model;
 
+import com.example.io_backend.model.enums.TutorialKind;
 import lombok.Getter;
 import lombok.Setter;
 

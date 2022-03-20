@@ -1,5 +1,7 @@
 package com.example.io_backend.model;
 
+import com.example.io_backend.model.enums.AmbulanceKind;
+import com.example.io_backend.model.enums.AmbulanceType;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.Hibernate;

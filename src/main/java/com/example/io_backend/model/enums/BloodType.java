@@ -1,4 +1,4 @@
-package com.example.io_backend.model;
+package com.example.io_backend.model.enums;
 
 public enum BloodType {
     A_PLUS, AB_PLUS, O_PLUS,

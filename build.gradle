@@ -34,18 +34,11 @@ repositories {
 	mavenCentral()
 }
 
-flyway {
-	user='root'
-	password='123'
-	driver='com.mysql.cj.jdbc.Driver'
-	url='jdbc:mysql://database:3306/test_db'
-}
-
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.flywaydb:flyway-core'
+	implementation 'com.fasterxml.jackson.module:jackson-module-jsonSchema:2.9.0'
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'mysql:mysql-connector-java'
 	annotationProcessor 'org.projectlombok:lombok'
