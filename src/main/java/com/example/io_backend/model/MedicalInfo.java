@@ -1,10 +1,13 @@
 package com.example.io_backend.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.example.io_backend.model.enums.BloodType;
+import lombok.*;
 
 import javax.persistence.*;
 
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @Table(name = "medical_info")
@@ -12,6 +15,7 @@ import javax.persistence.*;
 public class MedicalInfo {
     @Id
     @Column(name = "id", nullable = false)
+    @GeneratedValue
     private Long id;
 
     @Enumerated

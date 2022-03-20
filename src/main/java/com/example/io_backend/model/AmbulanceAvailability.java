@@ -1,5 +1,6 @@
 package com.example.io_backend.model;
 
+import com.example.io_backend.model.enums.AvailabilityType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,6 +14,7 @@ import java.util.Date;
 public class AmbulanceAvailability {
     @Id
     @Column(name = "id", nullable = false)
+    @GeneratedValue
     private Long id;
 
     @ManyToOne

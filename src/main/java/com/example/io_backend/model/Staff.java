@@ -1,5 +1,6 @@
 package com.example.io_backend.model;
 
+import com.example.io_backend.model.enums.StaffType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,7 +16,7 @@ public class Staff {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "mail", unique = true)
+    @Column(name = "mail")
     private String mail;
 
     @Column(name = "first_name")

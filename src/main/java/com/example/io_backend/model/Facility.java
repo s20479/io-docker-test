@@ -1,5 +1,7 @@
 package com.example.io_backend.model;
 
+import com.example.io_backend.model.enums.FacilityType;
+import com.example.io_backend.model.enums.HospitalType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,6 +16,7 @@ import java.util.Set;
 public class Facility {
     @Id
     @Column(name = "id", nullable = false)
+    @GeneratedValue
     private Long id;
 
     @Column(name = "name")
