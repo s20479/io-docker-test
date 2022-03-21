@@ -19,7 +19,7 @@
 Są dwa sposoby, w czasie pracy gdy wprowadzasz zmiany i chcesz aby wszystko się szybko kompilowało:
 
 1. Sklonuj to repozytorium
-2. Wykonaj `./gradlew bootJar && docker-compose up --build -f docker-compose.devBuild.yml`
+2. Wykonaj `./gradlew bootJar && docker-compose -f docker-compose.devBuild.yml up --build`
 3. Aplikacja powinna być dostępna pod portem `8080`, dodatkowo włączony jest agent debugowania na porcie `5005`
 4. Jeśli chcesz podłączyć debugger to musisz teraz w intellij skonfigurować "remote debugging"
    1. O tym w sekcji [Debugowanie](#debugowanie)
@@ -28,6 +28,6 @@ Są dwa sposoby, w czasie pracy gdy wprowadzasz zmiany i chcesz aby wszystko si�
 Drugi sposób, czyli zbudowanie w kompletnie czystym środowisku:
 
 1. Sklonuj to repozytorium
-2. Będąc w głównym katalogu tego repozytorium wykonaj: `docker-compose up --build -f docker-compose.cleanBuild.yml`
+2. Będąc w głównym katalogu tego repozytorium wykonaj: `docker-compose -f docker-compose.cleanBuild.yml up --build`
 
 ### Debugowanie
