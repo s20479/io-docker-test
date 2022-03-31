@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController()
-@RequestMapping(path = "/person")
+@RequestMapping(path = "/user")
 @RequiredArgsConstructor
-public class PersonController {
+public class UserController {
     private final UserRepository userRepository;
 
     @GetMapping("")
