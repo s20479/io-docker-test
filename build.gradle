@@ -16,7 +16,7 @@ application {
 	mainClass = "com.example.io_backend.IoBackendApplication"
 }
 
-run.doFirst {
+final importEnvironment = {
 	try(final inputStream = new FileInputStream("environment.properties")) {
 		final prop = new Properties()
 
@@ -27,6 +27,9 @@ run.doFirst {
 		}
 	}
 }
+
+run.doFirst importEnvironment
+test.doFirst importEnvironment
 
 bootJar {
 	archiveFileName = 'app.jar'
