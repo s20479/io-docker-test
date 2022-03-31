@@ -16,18 +16,23 @@
 
 ### Uruchamianie
 
-Są dwa sposoby, w czasie pracy gdy wprowadzasz zmiany i chcesz aby wszystko się szybko kompilowało:
+Wymagana java 17.
 
-1. Sklonuj to repozytorium
-2. Wykonaj `./gradlew bootJar && docker-compose -f docker-compose.devBuild.yml up --build`
-3. Aplikacja powinna być dostępna pod portem `8080`, dodatkowo włączony jest agent debugowania na porcie `5005`
-4. Jeśli chcesz podłączyć debugger to musisz teraz w intellij skonfigurować "remote debugging"
-   1. O tym w sekcji [Debugowanie](#debugowanie)
+#### W intellij:
 
+Na prawym panelu jest zakładka "Gradle", Tasks -> application -> run
 
-Drugi sposób, czyli zbudowanie w kompletnie czystym środowisku:
+#### W terminalu:
 
-1. Sklonuj to repozytorium
-2. Będąc w głównym katalogu tego repozytorium wykonaj: `docker-compose -f docker-compose.cleanBuild.yml up --build`
+`./gradlew run`
 
-### Debugowanie
+---
+#### Testowanie:
+
+#### W intellij:
+
+Na prawym panelu jest zakładka "Gradle", Tasks -> verification -> run
+
+#### W terminalu:
+
+`./gradlew test`
