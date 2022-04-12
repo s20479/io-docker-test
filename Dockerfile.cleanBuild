@@ -8,6 +8,7 @@ RUN chown nobody -R /output
 WORKDIR /nobody
 RUN apk add bash --no-cache
 USER nobody
+RUN echo "org.gradle.daemon=false" >> gradle.properties
 RUN /nobody/gradlew bootJar
 
 
