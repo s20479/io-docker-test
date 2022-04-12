@@ -1,8 +1,10 @@
 package com.example.io_backend.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Builder
@@ -14,9 +16,8 @@ import java.util.Date;
 @Entity
 public class User {
     @Id
-    @GeneratedValue
     @Column(name = "id")
-    private Integer id;
+    private String id;
 
     @Column(name = "firstname")
     private String firstName;
@@ -24,18 +25,8 @@ public class User {
     @Column(name = "lastname")
     private String lastName;
 
-    @Column(name = "password")
-    private String password;
-
-    @Column(name = "salt")
-    private String salt;
-
-    @Column(name = "email")
-    private String email;
-
-    @Temporal(TemporalType.DATE)
     @Column(name = "birth_date")
-    private Date birthDate;
+    private LocalDate birthDate;
 
     @Column(name = "phone")
     private String phone;
@@ -45,6 +36,7 @@ public class User {
 
     @OneToOne(orphanRemoval = true)
     @JoinColumn(name = "medical_info_id")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private MedicalInfo medicalInfo;
 
 }

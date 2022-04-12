@@ -4,18 +4,22 @@ import com.example.io_backend.model.*;
 import com.example.io_backend.model.enums.*;
 import com.example.io_backend.repository.*;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class DatabaseSeeder implements ApplicationRunner {
     private final UserRepository userRepository;
     private final MedicalInfoRepository medicalInfoRepository;
@@ -34,28 +38,30 @@ public class DatabaseSeeder implements ApplicationRunner {
     private final EquipmentLogRepository equipmentLogRepository;
     private final LocationRepository locationRepository;
 
-    private final PasswordEncoder passwordEncoder;
-
     private final int entitiesToGenerate = 10;
 
     @Override
     public void run(ApplicationArguments args) {
-       medicalInfoRepository.saveAll(generateMedicalInfos(entitiesToGenerate));
-       userRepository.saveAll(generateUsers(entitiesToGenerate));
-       staffRepository.saveAll(generateStaff(entitiesToGenerate));
-       victimRepository.saveAll(generateVictims(entitiesToGenerate));
-       ambulanceRepository.saveAll(generateAmbulances(entitiesToGenerate));
-       tutorialRepository.saveAll(generateTutorials(entitiesToGenerate));
-       reviewRepository.saveAll(generateReviews(entitiesToGenerate));
-       equipmentRepository.saveAll(generateEquipment(entitiesToGenerate));
-       facilityRepository.saveAll(generateFacilities(entitiesToGenerate));
-       reportSurveyRepository.saveAll(generateSurveys(entitiesToGenerate));
-       accidentReportRepository.saveAll(generateReports(entitiesToGenerate));
-       additionalServicesRepository.saveAll(generateAdditionalServices(entitiesToGenerate));
-       dispositorDutyEntryRepository.saveAll(generateDispositorDuties(entitiesToGenerate));
-       ambulanceAvailabilityRepository.saveAll(generateAmbulanceAvailability(entitiesToGenerate));
-       locationRepository.saveAll(generateLocations(entitiesToGenerate));
-       equipmentLogRepository.saveAll(generateEquipmentLog(entitiesToGenerate));
+      if (args.containsOption("seed")) {
+          medicalInfoRepository.saveAll(generateMedicalInfos(entitiesToGenerate));
+          userRepository.saveAll(generateUsers(entitiesToGenerate));
+          staffRepository.saveAll(generateStaff(entitiesToGenerate));
+          victimRepository.saveAll(generateVictims(entitiesToGenerate));
+          ambulanceRepository.saveAll(generateAmbulances(entitiesToGenerate));
+          tutorialRepository.saveAll(generateTutorials(entitiesToGenerate));
+          reviewRepository.saveAll(generateReviews(entitiesToGenerate));
+          equipmentRepository.saveAll(generateEquipment(entitiesToGenerate));
+          facilityRepository.saveAll(generateFacilities(entitiesToGenerate));
+          reportSurveyRepository.saveAll(generateSurveys(entitiesToGenerate));
+          accidentReportRepository.saveAll(generateReports(entitiesToGenerate));
+          additionalServicesRepository.saveAll(generateAdditionalServices(entitiesToGenerate));
+          dispositorDutyEntryRepository.saveAll(generateDispositorDuties(entitiesToGenerate));
+          ambulanceAvailabilityRepository.saveAll(generateAmbulanceAvailability(entitiesToGenerate));
+          locationRepository.saveAll(generateLocations(entitiesToGenerate));
+          equipmentLogRepository.saveAll(generateEquipmentLog(entitiesToGenerate));
+
+          log.info("Database seeding finished");
+      } else log.info("Database seeding not enabled");
     }
 
     private List<MedicalInfo> generateMedicalInfos(int length) {
@@ -81,10 +87,7 @@ public class DatabaseSeeder implements ApplicationRunner {
         for (int i = 0; i < length; i++) {
             User user = new User();
             user.setId(null);
-            user.setBirthDate(new Date(ThreadLocalRandom.current().nextInt() * 1000L));
-            user.setEmail(emails.get(ThreadLocalRandom.current().nextInt(emails.size())));
-            user.setPassword(passwordEncoder.encode("passwordsalt"));
-            user.setSalt("salt");
+            user.setBirthDate(LocalDate.of(2000, 1, 1));
             user.setBandCode(UUID.randomUUID().toString());
             user.setFirstName(names.get(ThreadLocalRandom.current().nextInt(names.size())).split(" ")[0]);
             user.setLastName(names.get(ThreadLocalRandom.current().nextInt(names.size())).split(" ")[1]);
@@ -106,9 +109,6 @@ public class DatabaseSeeder implements ApplicationRunner {
             staff.setStaffType(EnumUtils.randomValue(StaffType.class));
             staff.setFirstName(names.get(ThreadLocalRandom.current().nextInt(names.size())).split(" ")[0]);
             staff.setLastName(names.get(ThreadLocalRandom.current().nextInt(names.size())).split(" ")[1]);
-            staff.setMail(emails.get(ThreadLocalRandom.current().nextInt(emails.size())));
-            staff.setSalt("salt");
-            staff.setPasswordHash(passwordEncoder.encode("passwordsalt"));
 
             staffList.add(staff);
         }
