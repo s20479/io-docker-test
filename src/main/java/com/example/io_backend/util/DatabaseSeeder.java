@@ -113,11 +113,9 @@ public class DatabaseSeeder implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) {
         seedUsers();
-        if(!Boolean.valueOf(System.getenv("DATABASE_SEEDING"))) {
-            log.info("Database seeding not enabled");
-            return;
-        }
-        seedDatabase();
+      if (args.containsOption("seed")) {
+          seedDatabase();
+      } else log.info("Database seeding not enabled");
     }
 
     private void seedUsers() {
@@ -127,11 +125,11 @@ public class DatabaseSeeder implements ApplicationRunner {
                     .builder()
                     .firstName("test " + i)
                     .lastName("test " + i)
-                    .userName("test" + i)
+                    .userName("test"+i)
                     .phoneNumber("123321123")
-                    .email("test" + i)
+                    .email("test"+i)
                     .password("123")
-                    .birthDate(LocalDate.of(2000, 01, 01))
+                    .birthDate(LocalDate.of(2000,01,01))
                     .build();
 
             keycloakService.createUser(request);
@@ -140,7 +138,7 @@ public class DatabaseSeeder implements ApplicationRunner {
 
     private void seedDatabase() {
         medicalInfoRepository.saveAll(generateMedicalInfos(entitiesToGenerate));
-        userRepository.saveAll(generateUsers(entitiesToGenerate));
+        //userRepository.saveAll(generateUsers(entitiesToGenerate));
         staffRepository.saveAll(generateStaff(entitiesToGenerate));
         victimRepository.saveAll(generateVictims(entitiesToGenerate));
         ambulanceRepository.saveAll(generateAmbulances(entitiesToGenerate));
