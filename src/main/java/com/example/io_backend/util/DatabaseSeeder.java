@@ -1,8 +1,11 @@
 package com.example.io_backend.util;
 
 import com.example.io_backend.model.*;
+import com.example.io_backend.model.dto.CreateUserRequest;
+import com.example.io_backend.model.dto.representations.UserRepresentation;
 import com.example.io_backend.model.enums.*;
 import com.example.io_backend.repository.*;
+import com.example.io_backend.service.KeycloakService;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -38,30 +41,55 @@ public class DatabaseSeeder implements ApplicationRunner {
     private final EquipmentLogRepository equipmentLogRepository;
     private final LocationRepository locationRepository;
 
+    private final KeycloakService keycloakService;
+
     private final int entitiesToGenerate = 10;
 
     @Override
     public void run(ApplicationArguments args) {
+        seedUsers();
       if (args.containsOption("seed")) {
-          medicalInfoRepository.saveAll(generateMedicalInfos(entitiesToGenerate));
-          userRepository.saveAll(generateUsers(entitiesToGenerate));
-          staffRepository.saveAll(generateStaff(entitiesToGenerate));
-          victimRepository.saveAll(generateVictims(entitiesToGenerate));
-          ambulanceRepository.saveAll(generateAmbulances(entitiesToGenerate));
-          tutorialRepository.saveAll(generateTutorials(entitiesToGenerate));
-          reviewRepository.saveAll(generateReviews(entitiesToGenerate));
-          equipmentRepository.saveAll(generateEquipment(entitiesToGenerate));
-          facilityRepository.saveAll(generateFacilities(entitiesToGenerate));
-          reportSurveyRepository.saveAll(generateSurveys(entitiesToGenerate));
-          accidentReportRepository.saveAll(generateReports(entitiesToGenerate));
-          additionalServicesRepository.saveAll(generateAdditionalServices(entitiesToGenerate));
-          dispositorDutyEntryRepository.saveAll(generateDispositorDuties(entitiesToGenerate));
-          ambulanceAvailabilityRepository.saveAll(generateAmbulanceAvailability(entitiesToGenerate));
-          locationRepository.saveAll(generateLocations(entitiesToGenerate));
-          equipmentLogRepository.saveAll(generateEquipmentLog(entitiesToGenerate));
-
-          log.info("Database seeding finished");
+          seedDatabase();
       } else log.info("Database seeding not enabled");
+    }
+
+    private void seedUsers() {
+        log.info("creating users");
+        for (int i = 0; i < entitiesToGenerate; i++) {
+            CreateUserRequest request = CreateUserRequest
+                    .builder()
+                    .firstName("test " + i)
+                    .lastName("test " + i)
+                    .userName("test"+i)
+                    .phoneNumber("123321123")
+                    .email("test"+i)
+                    .password("123")
+                    .birthDate(LocalDate.of(2000,01,01))
+                    .build();
+
+            keycloakService.createUser(request);
+        }
+    }
+
+    private void seedDatabase() {
+        medicalInfoRepository.saveAll(generateMedicalInfos(entitiesToGenerate));
+        //userRepository.saveAll(generateUsers(entitiesToGenerate));
+        staffRepository.saveAll(generateStaff(entitiesToGenerate));
+        victimRepository.saveAll(generateVictims(entitiesToGenerate));
+        ambulanceRepository.saveAll(generateAmbulances(entitiesToGenerate));
+        tutorialRepository.saveAll(generateTutorials(entitiesToGenerate));
+        reviewRepository.saveAll(generateReviews(entitiesToGenerate));
+        equipmentRepository.saveAll(generateEquipment(entitiesToGenerate));
+        facilityRepository.saveAll(generateFacilities(entitiesToGenerate));
+        reportSurveyRepository.saveAll(generateSurveys(entitiesToGenerate));
+        accidentReportRepository.saveAll(generateReports(entitiesToGenerate));
+        additionalServicesRepository.saveAll(generateAdditionalServices(entitiesToGenerate));
+        dispositorDutyEntryRepository.saveAll(generateDispositorDuties(entitiesToGenerate));
+        ambulanceAvailabilityRepository.saveAll(generateAmbulanceAvailability(entitiesToGenerate));
+        locationRepository.saveAll(generateLocations(entitiesToGenerate));
+        equipmentLogRepository.saveAll(generateEquipmentLog(entitiesToGenerate));
+
+        log.info("Database seeding finished");
     }
 
     private List<MedicalInfo> generateMedicalInfos(int length) {

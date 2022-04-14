@@ -19,10 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -66,7 +63,6 @@ public class KeycloakService {
             if (!usersResponse.getStatusCode().is2xxSuccessful()) {
                 throw new RuntimeException("Error creating user!");
             }
-
             var user =  Arrays.stream(Objects.requireNonNull(usersResponse.getBody())).filter(x -> x.equals(userRepresentation)).toList().get(0);
 
             User businessUser = User
@@ -84,6 +80,23 @@ public class KeycloakService {
             return businessUser;
         }
         return null;
+    }
+
+    public List<UserRepresentation> getUsers() {
+        String URL = KeycloakApiConstants.createURL(BASE_URL + KeycloakApiConstants.USERS,"{REALM}", REALM);
+        log.info("Calling: " + URL);
+        ResponseEntity<UserRepresentation[]> usersResponse = keycloakRestTemplate.getForEntity(URL, UserRepresentation[].class);
+        if (!usersResponse.getStatusCode().is2xxSuccessful()) {
+            throw new RuntimeException("error");
+        }
+
+        return Arrays.asList(Objects.requireNonNull(usersResponse.getBody()));
+    }
+
+    public void deleteUser(UserRepresentation userRepresentation) {
+        String URL = BASE_URL + KeycloakApiConstants.DELETE_USER.replace("{REALM}", REALM);
+        URL = URL.replace("{USER_ID}", userRepresentation.getId());
+        keycloakRestTemplate.delete(URL);
     }
 
     public String loginUser(LoginRequest loginRequest) {
