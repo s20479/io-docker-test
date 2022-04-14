@@ -46,7 +46,15 @@ public class KeycloakRestTemplate {
     public void put(String url, Object body) {
         HttpEntity<?> httpEntity = new HttpEntity<>(body, getAuthorizationHeader());
 
-        restTemplate.put(url, body);
+        restTemplate.put(url, httpEntity);
+    }
+
+    public void delete(String url) {
+        log.info("Calling: " + url);
+
+        HttpEntity<?> httpEntity = new HttpEntity<>(getAuthorizationHeader());
+        //restTemplate.delete(url, httpEntity);
+        restTemplate.exchange(url, HttpMethod.DELETE, httpEntity, Void.class);
     }
 
     private HttpHeaders getAuthorizationHeader() {

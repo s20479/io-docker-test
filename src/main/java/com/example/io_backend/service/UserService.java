@@ -33,8 +33,8 @@ public class UserService {
         p.setId(user.getId());
         p.setLastName(user.getLastName());
         p.setFirstName(user.getFirstName());
-        p.setEmail(user.getEmail());
-        p.setPassword(user.getPassword());
+        //p.setEmail(user.getEmail());
+        //p.setPassword(user.getPassword());
         p.setBirthDate(user.getBirthDate());
         p.setMedicalInfo(user.getMedicalInfo());
         p.setPhone(user.getPhone());

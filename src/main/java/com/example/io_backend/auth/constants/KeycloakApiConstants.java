@@ -2,6 +2,7 @@ package com.example.io_backend.auth.constants;
 
 public class KeycloakApiConstants {
     public static final String USERS = "/admin/realms/{REALM}/users";
+    public static final String DELETE_USER = USERS + "/{USER_ID}";
     public static final String RESET_PASSWORD = USERS + "/{USER_ID}/" + "reset-password";
 
     public static final String TOKEN = "/realms/{REALM}/protocol/openid-connect/token";
