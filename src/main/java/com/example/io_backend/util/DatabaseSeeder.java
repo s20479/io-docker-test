@@ -1,17 +1,14 @@
 package com.example.io_backend.util;
 
 import com.example.io_backend.model.*;
-import com.example.io_backend.model.dto.CreateUserRequest;
-import com.example.io_backend.model.dto.representations.UserRepresentation;
+import com.example.io_backend.model.dto.request.CreateUserRequest;
 import com.example.io_backend.model.enums.*;
 import com.example.io_backend.repository.*;
 import com.example.io_backend.service.KeycloakService;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
@@ -316,8 +313,8 @@ public class DatabaseSeeder implements ApplicationRunner {
             ambulanceAvailability.setId(null);
             ambulanceAvailability.setAvailabilityType(EnumUtils.randomValue(AvailabilityType.class));
             ambulanceAvailability.setDetails("lorem ipsum " + i);
-            ambulanceAvailability.setDateStart(new Date());
-            ambulanceAvailability.setDateEnd(new Date());
+            ambulanceAvailability.setDateStart(LocalDate.now());
+            ambulanceAvailability.setDateEnd(LocalDate.now());
 
             ambulanceAvailabilityList.add(ambulanceAvailability);
         }

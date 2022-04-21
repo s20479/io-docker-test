@@ -1,7 +1,7 @@
 package com.example.io_backend.auth;
 
 import com.example.io_backend.auth.constants.KeycloakApiConstants;
-import com.example.io_backend.model.dto.LoginRequest;
+import com.example.io_backend.model.dto.request.LoginRequest;
 import com.example.io_backend.model.dto.representations.TokenRepresentation;
 import com.example.io_backend.auth.enums.OAuth2GrantType;
 import lombok.RequiredArgsConstructor;

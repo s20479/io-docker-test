@@ -2,9 +2,9 @@ package com.example.io_backend.controller;
 
 import com.example.io_backend.model.Staff;
 import com.example.io_backend.model.User;
-import com.example.io_backend.model.dto.CreateStaffUserRequest;
-import com.example.io_backend.model.dto.CreateUserRequest;
-import com.example.io_backend.model.dto.LoginRequest;
+import com.example.io_backend.model.dto.request.CreateStaffUserRequest;
+import com.example.io_backend.model.dto.request.CreateUserRequest;
+import com.example.io_backend.model.dto.request.LoginRequest;
 import com.example.io_backend.service.KeycloakService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
