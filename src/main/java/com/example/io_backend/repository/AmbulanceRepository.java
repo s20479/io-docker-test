@@ -7,18 +7,23 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 public interface AmbulanceRepository extends JpaRepository<Ambulance, Integer> {
 
-    List<Ambulance> findAllByIdLessThan(int id);
+    List<Ambulance> getAllByIdLessThan(int id);
 
-    List<Ambulance> findAllByAmbulanceType(AmbulanceType ambulanceType);
+    List<Ambulance> getAllByAmbulanceType(AmbulanceType ambulanceType);
 
-    List<Ambulance> findAllByAmbulanceKind(AmbulanceKind ambulanceKind);
+    List<Ambulance> getAllByAmbulanceKind(AmbulanceKind ambulanceKind);
 
-    List<Ambulance> findAllByFuelCapacityLessThan(int fuelCapacity);
+    List<Ambulance> getAllByFuelCapacityLessThan(int fuelCapacity);
 
-    List<Ambulance> findAllByAmbulanceKindIsNotIn(Collection<AmbulanceKind> collection);
+    List<Ambulance> getAllByAmbulanceKindIsNotIn(Collection<AmbulanceKind> collection);
 
-    List<Ambulance> findAllByFuelCapacityBetweenAndAmbulanceKind(int fuelCapacityLower, int fuelCapacityUpper, AmbulanceKind ambulanceKind);
+    List<Ambulance> getAllByFuelCapacityBetweenAndAmbulanceKind(int fuelCapacityLower, int fuelCapacityUpper, AmbulanceKind ambulanceKind);
+
+    List<Ambulance> getAllByPeopleCapacity(Integer numberOfSeats);
+
+    Optional<Ambulance> findAmbulanceByPlates(String licensePlate);
 }

@@ -4,6 +4,7 @@ import com.example.io_backend.model.Ambulance;
 import com.example.io_backend.model.enums.AmbulanceKind;
 import com.example.io_backend.model.enums.AmbulanceType;
 import com.example.io_backend.repository.AmbulanceRepository;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,6 +14,7 @@ import java.util.LinkedList;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@Disabled
 public class AmbulanceRepositoryTests {
 
     @Autowired
@@ -21,7 +23,7 @@ public class AmbulanceRepositoryTests {
     @Test
     public void findAllByIdLessThan() {
         for(int i = 0; i < 100; i += 10) {
-            for(var it : ambulanceRepository.findAllByIdLessThan(i)) {
+            for(var it : ambulanceRepository.getAllByIdLessThan(i)) {
                 assertTrue(it.getId() < i, "Id greater than requested");
             }
         }
@@ -30,7 +32,7 @@ public class AmbulanceRepositoryTests {
     @Test
     public void findAllByAmbulanceType() {
         for(var type : AmbulanceType.values()) {
-            var list = ambulanceRepository.findAllByAmbulanceType(type);
+            var list = ambulanceRepository.getAllByAmbulanceType(type);
             list.removeIf(it -> it.getAmbulanceType() == type);
             assertTrue(list.isEmpty(), "Ambulance list contains other types!");
         }
@@ -39,7 +41,7 @@ public class AmbulanceRepositoryTests {
     @Test
     public void findAllByAmbulanceKind() {
         for(var kind : AmbulanceKind.values()) {
-            var list = ambulanceRepository.findAllByAmbulanceKind(kind);
+            var list = ambulanceRepository.getAllByAmbulanceKind(kind);
             assertFalse(list.stream().anyMatch(it -> it.getAmbulanceKind() != kind), "Ambulance list contains other kinds!");
         }
     }
@@ -47,7 +49,7 @@ public class AmbulanceRepositoryTests {
     @Test
     public void findAllByFuelCapacityLessThan() {
         for(int i = 0; i < 1000000; i += 100) {
-            var list = ambulanceRepository.findAllByFuelCapacityLessThan(i);
+            var list = ambulanceRepository.getAllByFuelCapacityLessThan(i);
             int finalI = i;
             assertFalse(list.stream().anyMatch(it -> it.getFuelCapacity() > finalI), "Found ambulance with capacity greater than: " + i);
         }
@@ -59,7 +61,7 @@ public class AmbulanceRepositoryTests {
             var list = new LinkedList<AmbulanceKind>();
             list.add(kind);
 
-            var fromDb = ambulanceRepository.findAllByAmbulanceKindIsNotIn(list);
+            var fromDb = ambulanceRepository.getAllByAmbulanceKindIsNotIn(list);
 
             assertFalse(fromDb.stream().anyMatch(it -> it.getAmbulanceKind() == kind));
         }
@@ -77,7 +79,7 @@ public class AmbulanceRepositoryTests {
 
         ambulanceRepository.save(ambulance);
 
-        var list = ambulanceRepository.findAllByFuelCapacityBetweenAndAmbulanceKind(1000, Integer.MAX_VALUE, ambulance.getAmbulanceKind());
+        var list = ambulanceRepository.getAllByFuelCapacityBetweenAndAmbulanceKind(1000, Integer.MAX_VALUE, ambulance.getAmbulanceKind());
 
         assertFalse(list.isEmpty());
         assertFalse(list.stream().anyMatch(it -> it.getAmbulanceKind() != ambulance.getAmbulanceKind()));
