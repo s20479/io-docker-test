@@ -44,13 +44,80 @@ public class DatabaseSeeder implements ApplicationRunner {
     private final KeycloakService keycloakService;
 
     private final int entitiesToGenerate = 10;
+    private final List<String> chronicDiseases = List.of(
+            "ASTMA",
+            "CUKRZYCA",
+            "NADCIŚNIENIE"
+    );
+    private final List<String> allergies = List.of(
+            "ORZECHY",
+            "PYŁKI",
+            "TRUSKAWKI",
+            "ROZTOCZA"
+    );
+    private final List<String> emails = List.of(
+            "bockelboy@sbcglobal.net",
+            "ubergeeb@att.net",
+            "webteam@msn.com",
+            "hermes@outlook.com",
+            "themer@hotmail.com",
+            "oster@yahoo.com",
+            "lbecchi@msn.com",
+            "koudas@mac.com",
+            "mstrout@yahoo.ca",
+            "liedra@yahoo.com",
+            "email@example.com",
+            "test@test.com",
+            "abcdef@gmail.com"
+    );
+    private final List<String> names = List.of(
+            "Pamela Rikki",
+            "Wilburn Jolene",
+            "Addie Peter",
+            "Alex Geneva",
+            "Odetta Leon",
+            "Pamela Rikki",
+            "Wilburn Jolene",
+            "Addie Peter",
+            "Odetta Leon",
+            "Isabella Brielle",
+            "Gardenia Matt",
+            "Camilla Vince",
+            "Ness Petronel",
+            "Jacob Neely"
+    );
+    private final List<String> documentNames = List.of(
+            "DOKUMENT1",
+            "DOKUMENT2",
+            "DOKUMENT3",
+            "DOKUMENT4",
+            "DOKUMENT5",
+            "DOKUMENT6"
+    );
+    private final List<String> numberPlates = List.of(
+            "KWA4862",
+            "ZKA0443",
+            "RST5405",
+            "TKI8453",
+            "BKL5392",
+            "WPZ8939",
+            "WSK4065",
+            "TLW7107",
+            "WM71020",
+            "GA47053",
+            "OOL6118",
+            "TKN1306",
+            "WLS8512"
+    );
 
     @Override
     public void run(ApplicationArguments args) {
         seedUsers();
-      if (args.containsOption("seed")) {
-          seedDatabase();
-      } else log.info("Database seeding not enabled");
+        if(!Boolean.valueOf(System.getenv("DATABASE_SEEDING"))) {
+            log.info("Database seeding not enabled");
+            return;
+        }
+        seedDatabase();
     }
 
     private void seedUsers() {
@@ -60,11 +127,11 @@ public class DatabaseSeeder implements ApplicationRunner {
                     .builder()
                     .firstName("test " + i)
                     .lastName("test " + i)
-                    .userName("test"+i)
+                    .userName("test" + i)
                     .phoneNumber("123321123")
-                    .email("test"+i)
+                    .email("test" + i)
                     .password("123")
-                    .birthDate(LocalDate.of(2000,01,01))
+                    .birthDate(LocalDate.of(2000, 01, 01))
                     .build();
 
             keycloakService.createUser(request);
@@ -73,7 +140,7 @@ public class DatabaseSeeder implements ApplicationRunner {
 
     private void seedDatabase() {
         medicalInfoRepository.saveAll(generateMedicalInfos(entitiesToGenerate));
-        //userRepository.saveAll(generateUsers(entitiesToGenerate));
+        userRepository.saveAll(generateUsers(entitiesToGenerate));
         staffRepository.saveAll(generateStaff(entitiesToGenerate));
         victimRepository.saveAll(generateVictims(entitiesToGenerate));
         ambulanceRepository.saveAll(generateAmbulances(entitiesToGenerate));
@@ -114,7 +181,7 @@ public class DatabaseSeeder implements ApplicationRunner {
 
         for (int i = 0; i < length; i++) {
             User user = new User();
-            user.setId(null);
+            user.setId(UUID.randomUUID().toString());
             user.setBirthDate(LocalDate.of(2000, 1, 1));
             user.setBandCode(UUID.randomUUID().toString());
             user.setFirstName(names.get(ThreadLocalRandom.current().nextInt(names.size())).split(" ")[0]);
@@ -133,7 +200,7 @@ public class DatabaseSeeder implements ApplicationRunner {
 
         for (int i = 0; i < length; i++) {
             Staff staff = new Staff();
-            staff.setId(null);
+            staff.setId(UUID.randomUUID().toString());
             staff.setStaffType(EnumUtils.randomValue(StaffType.class));
             staff.setFirstName(names.get(ThreadLocalRandom.current().nextInt(names.size())).split(" ")[0]);
             staff.setLastName(names.get(ThreadLocalRandom.current().nextInt(names.size())).split(" ")[1]);
@@ -188,7 +255,7 @@ public class DatabaseSeeder implements ApplicationRunner {
             Tutorial tutorial = new Tutorial();
             tutorial.setTutorialKind(EnumUtils.randomValue(TutorialKind.class));
             tutorial.setId(null);
-            tutorial.setAverage(Double.valueOf(String.format(Locale.ROOT,"%.2f", Math.random())));
+            tutorial.setAverage(Double.valueOf(String.format(Locale.ROOT, "%.2f", Math.random())));
             tutorial.setName("Tutorial " + i);
 
             tutorials.add(tutorial);
@@ -204,7 +271,7 @@ public class DatabaseSeeder implements ApplicationRunner {
             Review review = new Review();
             review.setContent("lorem ipsum");
             review.setId(null);
-            review.setRating(ThreadLocalRandom.current().nextInt(1,11));
+            review.setRating(ThreadLocalRandom.current().nextInt(1, 11));
 
             reviews.add(review);
         }
@@ -255,7 +322,7 @@ public class DatabaseSeeder implements ApplicationRunner {
             rp.setDescription("Lorem ipsum");
             rp.setVictimBreathing(ThreadLocalRandom.current().nextBoolean());
             rp.setVictimConscious(ThreadLocalRandom.current().nextBoolean());
-            rp.setFileUrl(List.of("/var/surveys/survey"+i+".csv"));
+            rp.setFileUrl(List.of("/var/surveys/survey" + i + ".csv"));
 
             reportSurveys.add(rp);
         }
@@ -364,7 +431,7 @@ public class DatabaseSeeder implements ApplicationRunner {
         List<Equipment> equipmentList = equipmentRepository.findAll();
 
         for (int i = 0; i < length; i++) {
-            Double staring = ThreadLocalRandom.current().nextDouble(1,51);
+            Double staring = ThreadLocalRandom.current().nextDouble(1, 51);
             EquipmentLog e = new EquipmentLog();
             e.setId(null);
             e.setDateStart(new Date());
@@ -379,76 +446,5 @@ public class DatabaseSeeder implements ApplicationRunner {
 
         return equipmentLogs;
     }
-
-    private final List<String> chronicDiseases = List.of(
-            "ASTMA",
-            "CUKRZYCA",
-            "NADCIŚNIENIE"
-    );
-
-    private final List<String> allergies = List.of(
-            "ORZECHY",
-            "PYŁKI",
-            "TRUSKAWKI",
-            "ROZTOCZA"
-    );
-
-    private final List<String> emails = List.of(
-            "bockelboy@sbcglobal.net",
-            "ubergeeb@att.net",
-            "webteam@msn.com",
-            "hermes@outlook.com",
-            "themer@hotmail.com",
-            "oster@yahoo.com",
-            "lbecchi@msn.com",
-            "koudas@mac.com",
-            "mstrout@yahoo.ca",
-            "liedra@yahoo.com",
-            "email@example.com",
-            "test@test.com",
-            "abcdef@gmail.com"
-    );
-
-    private final List<String> names = List.of(
-            "Pamela Rikki",
-            "Wilburn Jolene",
-            "Addie Peter",
-            "Alex Geneva",
-            "Odetta Leon",
-            "Pamela Rikki",
-            "Wilburn Jolene",
-            "Addie Peter",
-            "Odetta Leon",
-            "Isabella Brielle",
-            "Gardenia Matt",
-            "Camilla Vince",
-            "Ness Petronel",
-            "Jacob Neely"
-    );
-
-    private final List<String> documentNames = List.of(
-            "DOKUMENT1",
-            "DOKUMENT2",
-            "DOKUMENT3",
-            "DOKUMENT4",
-            "DOKUMENT5",
-            "DOKUMENT6"
-    );
-
-    private final List<String> numberPlates = List.of(
-            "KWA4862",
-            "ZKA0443",
-            "RST5405",
-            "TKI8453",
-            "BKL5392",
-            "WPZ8939",
-            "WSK4065",
-            "TLW7107",
-            "WM71020",
-            "GA47053",
-            "OOL6118",
-            "TKN1306",
-            "WLS8512"
-    );
 
 }
