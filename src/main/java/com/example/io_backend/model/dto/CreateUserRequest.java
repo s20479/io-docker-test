@@ -1,6 +1,7 @@
 package com.example.io_backend.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,6 +11,7 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
+@Builder
 public class CreateUserRequest { // TODO add custom validators for date and phone
     @NotBlank
     private String firstName;

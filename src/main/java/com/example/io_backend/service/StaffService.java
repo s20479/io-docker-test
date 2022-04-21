@@ -31,9 +31,9 @@ public class StaffService {
         s.setId(staff.getId());
         s.setFirstName(staff.getFirstName());
         s.setLastName(staff.getLastName());
-        s.setMail(staff.getMail());
-        s.setPasswordHash(staff.getPasswordHash());
-        s.setSalt(staff.getSalt());
+        //s.setMail(staff.getMail());
+        //s.setPasswordHash(staff.getPasswordHash());
+        //s.setSalt(staff.getSalt());
         s.setStaffType(staff.getStaffType());
 
         staffRepository.save(s);
