@@ -1,6 +1,9 @@
 package com.example.io_backend.service;
 
+import com.example.io_backend.dto.UserMedicalInfoDto;
+import com.example.io_backend.dto.converter.UserMedicalInfoConverter;
 import com.example.io_backend.exception.NotFoundException;
+import com.example.io_backend.model.MedicalInfo;
 import com.example.io_backend.model.User;
 import com.example.io_backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +17,8 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final MedicalInfoService medicalInfoService;
+    UserMedicalInfoConverter converter;
 
 
     public List<User> getUsers() {
@@ -33,8 +38,6 @@ public class UserService {
         p.setId(user.getId());
         p.setLastName(user.getLastName());
         p.setFirstName(user.getFirstName());
-        //p.setEmail(user.getEmail());
-        //p.setPassword(user.getPassword());
         p.setBirthDate(user.getBirthDate());
         p.setMedicalInfo(user.getMedicalInfo());
         p.setPhone(user.getPhone());
@@ -47,4 +50,23 @@ public class UserService {
         var p = userRepository.findById(id).orElseThrow(() -> new NotFoundException("Person not found"));
         userRepository.delete(p);
     }
+
+    public UserMedicalInfoDto addUserMedicalInfo(Integer id, MedicalInfo medicalInfo) {
+        if(medicalInfo != null) {
+            User user = this.getUserById(id);
+            medicalInfoService.addMedicalInfo(medicalInfo);
+            user.setMedicalInfo(medicalInfo);
+            return converter.entityToDto(user);
+        }
+        return null;
+    }
+
+    public UserMedicalInfoDto updateUserMedicalInfo(Integer id, MedicalInfo medicalInfo ) {
+        User user = this.getUserById(id);
+        medicalInfoService.updateMedicalInfo(medicalInfo,user.getMedicalInfo().getId());
+        return converter.entityToDto(user);
+    }
+
+
+
 }
