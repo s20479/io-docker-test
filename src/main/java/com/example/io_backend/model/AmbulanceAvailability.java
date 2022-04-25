@@ -1,12 +1,15 @@
 package com.example.io_backend.model;
 
 import com.example.io_backend.model.enums.AvailabilityType;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @Table(name = "ambulance_availability")
@@ -27,11 +30,11 @@ public class AmbulanceAvailability {
 
     @Temporal(TemporalType.DATE)
     @Column(name = "date_start")
-    private Date dateStart;
+    private LocalDate dateStart;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "date_end")
-    private Date dateEnd;
+    private LocalDate dateEnd;
 
     @Column(name = "details")
     private String details;
