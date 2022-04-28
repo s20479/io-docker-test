@@ -1,15 +1,18 @@
 package com.example.io_backend.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 
 @Getter
 @Setter
 @Table(name = "equipment_log")
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class EquipmentLog {
     @Id
     @Column(name = "id", nullable = false)

@@ -30,7 +30,11 @@ public class EquipmentService {
 
     public List<EquipmentResponse> addEquipment(List<EquipmentDto> equipmentRequest) {
         List<Equipment> equipment = new ArrayList<>();
-        equipmentRequest.forEach(x -> equipment.add(new Equipment(null, x.getName())));
+        for (var e : equipmentRequest) {
+            Equipment eq = new Equipment(null, e.getName());
+            eq = equipmentRepository.save(eq);
+            equipment.add(eq);
+        }
 
         return equipment.stream().map(this::mapToResponse).toList();
     }

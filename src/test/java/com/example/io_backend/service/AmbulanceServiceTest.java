@@ -2,6 +2,8 @@ package com.example.io_backend.service;
 
 import com.example.io_backend.model.Ambulance;
 import com.example.io_backend.model.AmbulanceAvailability;
+import com.example.io_backend.model.Equipment;
+import com.example.io_backend.model.EquipmentLog;
 import com.example.io_backend.model.dto.AmbulanceDto;
 import com.example.io_backend.model.dto.response.AmbulanceResponse;
 import com.example.io_backend.model.enums.AmbulanceKind;
@@ -9,6 +11,8 @@ import com.example.io_backend.model.enums.AmbulanceType;
 import com.example.io_backend.model.enums.AvailabilityType;
 import com.example.io_backend.repository.AmbulanceAvailabilityRepository;
 import com.example.io_backend.repository.AmbulanceRepository;
+import com.example.io_backend.repository.EquipmentLogRepository;
+import com.example.io_backend.repository.EquipmentRepository;
 import com.example.io_backend.util.EnumUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
@@ -16,19 +20,87 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class AmbulanceServiceTest {
 
     private final AmbulanceRepository ambulanceRepository = mock(AmbulanceRepository.class);
     private final AmbulanceAvailabilityRepository availabilityRepository = mock(AmbulanceAvailabilityRepository.class);
+    private final EquipmentRepository equipmentRepository = mock(EquipmentRepository.class);
+    private final EquipmentLogRepository equipmentLogRepository = mock(EquipmentLogRepository.class);
+    private final AmbulanceService ambulanceService = new AmbulanceService(ambulanceRepository, availabilityRepository, equipmentRepository ,equipmentLogRepository);
 
-    private final AmbulanceService ambulanceService = new AmbulanceService(ambulanceRepository, availabilityRepository);
+    @Test
+    void assignEquipment() {
+        Equipment eq = new Equipment(1L, "eq1");
+        Ambulance ambulance = Ambulance
+                .builder()
+                .id(1)
+                .ambulanceKind(AmbulanceKind.N)
+                .ambulanceType(AmbulanceType.A)
+                .fuelCapacity(10)
+                .peopleCapacity(9)
+                .plates("plates")
+                .build();
+
+        EquipmentLog eqlog1 = EquipmentLog
+                .builder()
+                .id(1L)
+                .ambulance(ambulance)
+                .equipment(eq)
+                .currentAmount(10d)
+                .startingAmount(10d)
+                .dateStart(LocalDate.now())
+                .dateEnd(LocalDate.now().plusDays(1))
+                .measurement("m")
+                .build();
+
+        EquipmentLog eqlog2 = EquipmentLog
+                .builder()
+                .id(1L)
+                .ambulance(ambulance)
+                .equipment(new Equipment(2L, "eq2"))
+                .currentAmount(10d)
+                .startingAmount(10d)
+                .dateStart(LocalDate.now())
+                .dateEnd(LocalDate.now().plusDays(1))
+                .measurement("m")
+                .build();
+
+        when(equipmentRepository.findById(any(Long.class))).thenReturn(Optional.of(eq));
+        when(ambulanceRepository.findById(any(Integer.class))).thenReturn(Optional.ofNullable(ambulance));
+        when(equipmentLogRepository.findAll()).thenReturn(List.of(eqlog1, eqlog2));
+        when(equipmentLogRepository.save(any(EquipmentLog.class))).thenAnswer(x -> x.getArguments()[0]);
+
+        var result = ambulanceService.assignEquipment(1, 1L);
+
+        assertEquals(eqlog1.getEquipment(), result.getEquipment());
+        assertEquals(eqlog1.getAmbulance(), result.getAmbulance());
+        verify(equipmentLogRepository, times(1)).save(any(EquipmentLog.class));
+
+    }
+
+    @Test
+    void setStatus() {
+        Ambulance ambulance = Ambulance
+                .builder()
+                .id(1)
+                .plates("plates")
+                .peopleCapacity(9)
+                .fuelCapacity(10)
+                .ambulanceType(AmbulanceType.A)
+                .ambulanceKind(AmbulanceKind.N)
+                .build();
+
+        when(ambulanceRepository.findById(any(Integer.class))).thenReturn(Optional.ofNullable(ambulance));
+        when(availabilityRepository.save(any(AmbulanceAvailability.class))).thenAnswer(x -> x.getArguments()[0]);
+
+    }
 
     @Test
     void getAmbulancesShouldReturn() {
