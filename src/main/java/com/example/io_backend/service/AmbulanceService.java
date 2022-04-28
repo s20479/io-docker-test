@@ -7,8 +7,9 @@ import com.example.io_backend.model.Equipment;
 import com.example.io_backend.model.EquipmentLog;
 import com.example.io_backend.model.dto.AmbulanceAvailabilityDto;
 import com.example.io_backend.model.dto.AmbulanceDto;
-import com.example.io_backend.model.dto.EquipmentDto;
 import com.example.io_backend.model.dto.response.AmbulanceResponse;
+import com.example.io_backend.model.dto.response.EquipmentLogResponse;
+import com.example.io_backend.model.dto.response.EquipmentResponse;
 import com.example.io_backend.model.enums.AmbulanceKind;
 import com.example.io_backend.model.enums.AmbulanceType;
 import com.example.io_backend.model.enums.AvailabilityType;
@@ -17,9 +18,9 @@ import com.example.io_backend.repository.AmbulanceRepository;
 import com.example.io_backend.repository.EquipmentLogRepository;
 import com.example.io_backend.repository.EquipmentRepository;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.weaver.ast.Not;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -28,11 +29,11 @@ import java.util.stream.Collectors;
 public class AmbulanceService {
     private final AmbulanceRepository ambulanceRepository;
     private final AmbulanceAvailabilityRepository availabilityRepository;
-
     private final EquipmentRepository equipmentRepository;
     private final EquipmentLogRepository equipmentLogRepository;
 
-    public void assignEquipment(Integer ambulanceId, Long equipmentId) { // unidirectional relations ????
+   @Transactional
+    public EquipmentLogResponse assignEquipment(Integer ambulanceId, Long equipmentId) { // unidirectional relations ????
         Equipment eq = equipmentRepository.findById(equipmentId).orElseThrow(() -> new NotFoundException("Equipment with id: " + equipmentId + " couldn't be found"));
         Ambulance ambulance = ambulanceRepository.findById(ambulanceId).orElseThrow(() -> new NotFoundException("Ambulance with id: " + ambulanceId + " couldn't be found"));
         List<EquipmentLog> equipmentLogList = equipmentLogRepository.findAll()
@@ -41,13 +42,15 @@ public class AmbulanceService {
                 .toList();
 
         if (equipmentLogList.size() == 0) {
-            return;
+            throw new NotFoundException("No log for that ambulance and equipment");
         }
 
         EquipmentLog current = equipmentLogList.get(0);
         current.setEquipment(eq);
 
-        equipmentLogRepository.save(current);
+        current = equipmentLogRepository.save(current);
+
+        return mapToResponse(current);
     }
 
     public void setStatus(Integer ambulanceId, AmbulanceAvailabilityDto availabilityDto) {
@@ -165,6 +168,19 @@ public class AmbulanceService {
                 .peopleCapacity(dto.getNumberOfSeats())
                 .fuelCapacity(dto.getFuelTankCapacity())
                 .plates(dto.getLicensePlates())
+                .build();
+    }
+
+    private EquipmentLogResponse mapToResponse(EquipmentLog equipment) {
+        return EquipmentLogResponse
+                .builder()
+                .measurement(equipment.getMeasurement())
+                .equipment(equipment.getEquipment())
+                .startingAmount(equipment.getStartingAmount())
+                .currentAmount(equipment.getCurrentAmount())
+                .dateStart(equipment.getDateStart())
+                .dateEnd(equipment.getDateEnd())
+                .ambulance(equipment.getAmbulance())
                 .build();
     }
 }
