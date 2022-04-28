@@ -1,11 +1,10 @@
 package com.example.io_backend.model.dto;
 
-import com.example.io_backend.model.AmbulanceAvailability;
 import com.example.io_backend.model.enums.AmbulanceKind;
 import com.example.io_backend.model.enums.AmbulanceType;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
+
+import javax.validation.constraints.*;
 
 @Getter
 @Setter
@@ -13,9 +12,17 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AmbulanceDto {
+    @NotNull(message = "Number of seats is is null!!")
+    @Positive(message = "Number of seats should be a positive value!")
     private Integer numberOfSeats;
+    @NotNull(message = "Fuel tank capacity is is null!!")
+    @Positive(message = "Fuel tank capacity should be a positive value!")
     private Integer fuelTankCapacity;
+    @NotEmpty
+    @NotBlank
     private String licensePlates;
+    @NotNull(message = "Ambulance type is null!")
     private AmbulanceType type;
+    @NotNull(message = "Ambulance kind is null!")
     private AmbulanceKind kind;
 }

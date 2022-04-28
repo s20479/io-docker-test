@@ -4,6 +4,8 @@ import com.example.io_backend.model.Ambulance;
 import com.example.io_backend.model.dto.AmbulanceAvailabilityDto;
 import com.example.io_backend.model.dto.AmbulanceDto;
 import com.example.io_backend.model.dto.response.AmbulanceResponse;
+import com.example.io_backend.model.dto.response.EquipmentLogResponse;
+import com.example.io_backend.model.dto.response.EquipmentResponse;
 import com.example.io_backend.model.enums.AmbulanceKind;
 import com.example.io_backend.model.enums.AmbulanceType;
 import com.example.io_backend.service.AmbulanceService;
@@ -29,8 +31,8 @@ public class AmbulanceController {
     }
 
     @PostMapping("/{id}/equipment/{eqid}")
-    public void assignEquipment(@PathVariable Integer id, @PathVariable Long eqid) {
-        ambulanceService.assignEquipment(id, eqid);
+    public ResponseEntity<EquipmentLogResponse> assignEquipment(@PathVariable Integer id, @PathVariable Long eqid) {
+        return ResponseEntity.ok(ambulanceService.assignEquipment(id, eqid));
     }
 
     @GetMapping
