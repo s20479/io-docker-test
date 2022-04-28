@@ -9,6 +9,7 @@ import com.example.io_backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 
@@ -25,16 +26,16 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User getUserById(Integer id) {
-        return userRepository.findById(id).orElseThrow(() -> new NotFoundException("No record with that id"));
+    public User getUserById(Integer userId) {
+        return userRepository.findById(userId).orElseThrow(() -> new NotFoundException("No record with that id"));
     }
 
     public User addUser(User user) {
         return userRepository.save(user);
     }
 
-    public void updateUser(User user, Integer id) {
-        var p = userRepository.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
+    public void updateUser(User user, Integer userId) {
+        var p = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
         p.setId(user.getId());
         p.setLastName(user.getLastName());
         p.setFirstName(user.getFirstName());
@@ -46,23 +47,20 @@ public class UserService {
         userRepository.save(p);
     }
 
-    public void deleteUser(Integer id) {
-        var p = userRepository.findById(id).orElseThrow(() -> new NotFoundException("Person not found"));
+    public void deleteUser(Integer userId) {
+        var p = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Person not found"));
         userRepository.delete(p);
     }
 
-    public UserMedicalInfoDto addUserMedicalInfo(Integer id, MedicalInfo medicalInfo) {
-        if(medicalInfo != null) {
-            User user = this.getUserById(id);
+    public UserMedicalInfoDto addUserMedicalInfo(Integer userId,@NotNull MedicalInfo medicalInfo) {
+            User user = this.getUserById(userId);
             medicalInfoService.addMedicalInfo(medicalInfo);
             user.setMedicalInfo(medicalInfo);
             return converter.entityToDto(user);
-        }
-        return null;
     }
 
-    public UserMedicalInfoDto updateUserMedicalInfo(Integer id, MedicalInfo medicalInfo ) {
-        User user = this.getUserById(id);
+    public UserMedicalInfoDto updateUserMedicalInfo(Integer userId, MedicalInfo medicalInfo ) {
+        User user = this.getUserById(userId);
         medicalInfoService.updateMedicalInfo(medicalInfo,user.getMedicalInfo().getId());
         return converter.entityToDto(user);
     }
