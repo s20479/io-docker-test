@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -17,7 +17,7 @@ public class EquipmentLog {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "equipment_id")
+    @JoinColumn(name = "equipment_id", unique = true)
     private Equipment equipment;
 
     @ManyToOne
@@ -26,11 +26,11 @@ public class EquipmentLog {
 
     @Temporal(TemporalType.DATE)
     @Column(name = "date_start")
-    private Date dateStart;
+    private LocalDate dateStart;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "date_end")
-    private Date dateEnd;
+    private LocalDate dateEnd;
 
     @Column(name = "starting_amount")
     private Double startingAmount;

@@ -3,14 +3,21 @@ package com.example.io_backend.service;
 import com.example.io_backend.exception.NotFoundException;
 import com.example.io_backend.model.Ambulance;
 import com.example.io_backend.model.AmbulanceAvailability;
+import com.example.io_backend.model.Equipment;
+import com.example.io_backend.model.EquipmentLog;
+import com.example.io_backend.model.dto.AmbulanceAvailabilityDto;
 import com.example.io_backend.model.dto.AmbulanceDto;
+import com.example.io_backend.model.dto.EquipmentDto;
 import com.example.io_backend.model.dto.response.AmbulanceResponse;
 import com.example.io_backend.model.enums.AmbulanceKind;
 import com.example.io_backend.model.enums.AmbulanceType;
 import com.example.io_backend.model.enums.AvailabilityType;
 import com.example.io_backend.repository.AmbulanceAvailabilityRepository;
 import com.example.io_backend.repository.AmbulanceRepository;
+import com.example.io_backend.repository.EquipmentLogRepository;
+import com.example.io_backend.repository.EquipmentRepository;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.weaver.ast.Not;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -21,6 +28,41 @@ import java.util.stream.Collectors;
 public class AmbulanceService {
     private final AmbulanceRepository ambulanceRepository;
     private final AmbulanceAvailabilityRepository availabilityRepository;
+
+    private final EquipmentRepository equipmentRepository;
+    private final EquipmentLogRepository equipmentLogRepository;
+
+    public void assignEquipment(Integer ambulanceId, Long equipmentId) { // unidirectional relations ????
+        Equipment eq = equipmentRepository.findById(equipmentId).orElseThrow(() -> new NotFoundException("Equipment with id: " + equipmentId + " couldn't be found"));
+        Ambulance ambulance = ambulanceRepository.findById(ambulanceId).orElseThrow(() -> new NotFoundException("Ambulance with id: " + ambulanceId + " couldn't be found"));
+        List<EquipmentLog> equipmentLogList = equipmentLogRepository.findAll()
+                .stream()
+                .filter(x -> x.getEquipment().equals(eq) && x.getAmbulance().equals(ambulance))
+                .toList();
+
+        if (equipmentLogList.size() == 0) {
+            return;
+        }
+
+        EquipmentLog current = equipmentLogList.get(0);
+        current.setEquipment(eq);
+
+        equipmentLogRepository.save(current);
+    }
+
+    public void setStatus(Integer ambulanceId, AmbulanceAvailabilityDto availabilityDto) {
+        Ambulance ambulance = ambulanceRepository.findById(ambulanceId).orElseThrow(NotFoundException::new);
+        AmbulanceAvailability availability = AmbulanceAvailability
+                .builder()
+                .ambulance(ambulance)
+                .availabilityType(availabilityDto.getAvailabilityType())
+                .dateStart(availabilityDto.getSince())
+                .dateEnd(availabilityDto.getTo())
+                .details(availabilityDto.getDetails())
+                .build();
+
+        availabilityRepository.save(availability);
+    }
 
     public List<AmbulanceResponse> getAmbulances() {
         List<Ambulance> ambulances = ambulanceRepository.findAll();

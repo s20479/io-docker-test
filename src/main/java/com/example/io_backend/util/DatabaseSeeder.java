@@ -364,8 +364,8 @@ public class DatabaseSeeder implements ApplicationRunner {
             Double staring = ThreadLocalRandom.current().nextDouble(1,51);
             EquipmentLog e = new EquipmentLog();
             e.setId(null);
-            e.setDateStart(new Date());
-            e.setDateEnd(new Date());
+            e.setDateStart(LocalDate.now());
+            e.setDateEnd(LocalDate.now());
             e.setStartingAmount(staring);
             e.setCurrentAmount(staring - ThreadLocalRandom.current().nextDouble(0, 51));
             e.setAmbulance(ambulances.get(ThreadLocalRandom.current().nextInt(ambulances.size())));
