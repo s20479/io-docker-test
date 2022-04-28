@@ -1,6 +1,7 @@
 package com.example.io_backend.controller;
 
 import com.example.io_backend.model.Ambulance;
+import com.example.io_backend.model.dto.AmbulanceAvailabilityDto;
 import com.example.io_backend.model.dto.AmbulanceDto;
 import com.example.io_backend.model.dto.response.AmbulanceResponse;
 import com.example.io_backend.model.enums.AmbulanceKind;
@@ -11,7 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,6 +22,16 @@ import java.util.List;
 public class AmbulanceController {
 
     private final AmbulanceService ambulanceService;
+
+    @PostMapping("/{id}/availability")
+    public void changeStatus(@PathVariable Integer id, @RequestBody AmbulanceAvailabilityDto dto) {
+        ambulanceService.setStatus(id, dto);
+    }
+
+    @PostMapping("/{id}/equipment/{eqid}")
+    public void assignEquipment(@PathVariable Integer id, @PathVariable Long eqid) {
+        ambulanceService.assignEquipment(id, eqid);
+    }
 
     @GetMapping
     public ResponseEntity<?> getAll() {
