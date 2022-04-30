@@ -1,12 +1,12 @@
 package com.example.io_backend.service;
 
 import com.example.io_backend.dto.UserMedicalInfoDto;
-import com.example.io_backend.dto.converter.UserMedicalInfoConverter;
 import com.example.io_backend.exception.NotFoundException;
 import com.example.io_backend.model.MedicalInfo;
 import com.example.io_backend.model.User;
 import com.example.io_backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
@@ -19,7 +19,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final MedicalInfoService medicalInfoService;
-    UserMedicalInfoConverter converter;
+    private final ModelMapper modelMapper;
 
 
     public List<User> getUsers() {
@@ -56,13 +56,13 @@ public class UserService {
             User user = this.getUserById(userId);
             medicalInfoService.addMedicalInfo(medicalInfo);
             user.setMedicalInfo(medicalInfo);
-            return converter.entityToDto(user);
+        return modelMapper.map(user,UserMedicalInfoDto.class);
     }
 
     public UserMedicalInfoDto updateUserMedicalInfo(Integer userId, MedicalInfo medicalInfo ) {
         User user = this.getUserById(userId);
         medicalInfoService.updateMedicalInfo(medicalInfo,user.getMedicalInfo().getId());
-        return converter.entityToDto(user);
+        return modelMapper.map(user,UserMedicalInfoDto.class);
     }
 
 

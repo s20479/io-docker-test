@@ -3,6 +3,8 @@ package com.example.io_backend.controller;
 import com.example.io_backend.model.AccidentReport;
 import com.example.io_backend.service.AccidentReportService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,18 +17,18 @@ public class AccidentReportController {
     private final AccidentReportService accidentReportService;
 
     @GetMapping("")
-    public List<AccidentReport> getAll() {
-        return accidentReportService.getAccidentReports();
+    public ResponseEntity<List<AccidentReport>> getAll() {
+        return new ResponseEntity<>(accidentReportService.getAccidentReports(), HttpStatus.OK);
     }
 
     @GetMapping("{id}")
-    public AccidentReport getById(@PathVariable Long id) {
-        return accidentReportService.getAccidentReportById(id);
+    public ResponseEntity<AccidentReport> getById(@PathVariable Long id) {
+        return new ResponseEntity<>(accidentReportService.getAccidentReportById(id),HttpStatus.OK) ;
     }
 
     @PostMapping("")
-    public AccidentReport add(@RequestBody AccidentReport accidentReport) {
-        return accidentReportService.addAccidentReport(accidentReport);
+    public ResponseEntity<AccidentReport> add(@RequestBody AccidentReport accidentReport) {
+        return new ResponseEntity<>(accidentReportService.addAccidentReport(accidentReport),HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
