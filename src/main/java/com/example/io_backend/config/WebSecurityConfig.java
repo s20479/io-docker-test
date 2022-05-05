@@ -4,6 +4,7 @@ import org.keycloak.adapters.springsecurity.KeycloakConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -14,6 +15,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.web.client.RestTemplate;
 
 @KeycloakConfiguration
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter  {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -23,7 +25,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter  {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                //.antMatchers("/register").permitAll()
+                //.antMatchers("/emergency/new").hasRole("user")
+                //.antMatchers("/emergency/approve").hasRole("dispositor")
                 .anyRequest().permitAll()
                 .and()
                 .oauth2ResourceServer()

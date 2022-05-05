@@ -26,4 +26,6 @@ public interface AmbulanceRepository extends JpaRepository<Ambulance, Integer> {
     List<Ambulance> getAllByPeopleCapacity(Integer numberOfSeats);
 
     Optional<Ambulance> findAmbulanceByPlates(String licensePlate);
+
+    Optional<Ambulance> findById(Integer id);
 }

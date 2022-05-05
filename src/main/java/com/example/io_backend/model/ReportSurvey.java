@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -27,9 +28,8 @@ public class ReportSurvey {
     @Column(name = "description")
     private String description;
 
-    @Temporal(TemporalType.DATE)
     @Column(name = "date")
-    private Date date;
+    private LocalDate date;
 
     @ElementCollection
     @Column(name = "file_url")
