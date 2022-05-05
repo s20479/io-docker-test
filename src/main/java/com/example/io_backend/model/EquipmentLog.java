@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Getter
@@ -24,13 +25,11 @@ public class EquipmentLog {
     @JoinColumn(name = "ambulance_id")
     private Ambulance ambulance;
 
-    @Temporal(TemporalType.DATE)
     @Column(name = "date_start")
-    private Date dateStart;
+    private LocalDate dateStart;
 
-    @Temporal(TemporalType.DATE)
     @Column(name = "date_end")
-    private Date dateEnd;
+    private LocalDate dateEnd;
 
     @Column(name = "starting_amount")
     private Double startingAmount;

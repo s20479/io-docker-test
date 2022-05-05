@@ -22,6 +22,9 @@ public class Staff {
     @Column(name = "last_name")
     private String lastName;
 
+    @Column(name = "user_name")
+    private String userName;
+
     @Column(name = "birth_date")
     private LocalDate birthDate;
 

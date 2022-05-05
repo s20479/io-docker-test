@@ -24,15 +24,13 @@ public class AmbulanceAvailability {
     @JoinColumn(name = "ambulance_id")
     private Ambulance ambulance;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     @Column(name = "availability_type")
     private AvailabilityType availabilityType;
 
-    @Temporal(TemporalType.DATE)
     @Column(name = "date_start")
     private LocalDate dateStart;
 
-    @Temporal(TemporalType.DATE)
     @Column(name = "date_end")
     private LocalDate dateEnd;
 

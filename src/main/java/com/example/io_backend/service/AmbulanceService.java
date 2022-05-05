@@ -80,6 +80,24 @@ public class AmbulanceService {
         return availableAmbulances;
     }
 
+    public List<Ambulance> getAvailableAmbulances() {
+        Set<Ambulance> ambulanceSet = new HashSet<>(ambulanceRepository.findAll());
+        List<AmbulanceAvailability> availabilityList = availabilityRepository.findAll();
+
+        return availabilityList.stream()
+                .filter(x -> ambulanceSet.contains(x.getAmbulance()))
+                .filter(x -> x.getAvailabilityType().equals(AvailabilityType.AVAILABLE))
+                .map(AmbulanceAvailability::getAmbulance)
+                .collect(Collectors.toList());
+    }
+
+    public boolean isAvailable(Integer id) {
+        List<Ambulance> ambulances = getAvailableAmbulances();
+        Optional<Integer> availableId = ambulances.stream().map(Ambulance::getId).filter(x -> x.equals(id)).findFirst();
+
+        return availableId.isPresent();
+    }
+
     public AmbulanceResponse updateAmbulance(AmbulanceDto ambulance, Integer id) {
         var a = ambulanceRepository.findById(id).orElseThrow(()-> new NotFoundException("No record with that ID"));
 

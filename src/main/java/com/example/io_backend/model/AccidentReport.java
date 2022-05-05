@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -21,9 +22,11 @@ public class AccidentReport {
     @Column(name = "danger_rating")
     private Short dangerRating;
 
-    @Temporal(TemporalType.DATE)
     @Column(name = "date")
-    private Date date;
+    private LocalDate date;
+
+    @Column(name = "approved")
+    private Boolean approved;
 
     @Column(name = "closed")
     private Boolean closed;
