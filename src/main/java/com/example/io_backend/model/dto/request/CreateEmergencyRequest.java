@@ -10,7 +10,6 @@ import lombok.Setter;
 @Setter
 @Builder
 public class CreateEmergencyRequest {
-    private Short dangerRating;
     private String description;
     private Boolean breathing;
     private Boolean conscious;
