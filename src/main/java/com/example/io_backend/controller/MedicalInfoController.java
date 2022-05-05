@@ -44,17 +44,17 @@ public class MedicalInfoController {
     }
 
     @PutMapping("/blood/{id}")
-    public ResponseEntity<MedicalInfoDto> updateBloodtype(@PathVariable Long id, @RequestBody BloodType bloodType) {
+    public ResponseEntity<MedicalInfoDto> updateBloodtype(@PathVariable Long id, @RequestBody String bloodType) {
         return new ResponseEntity<>(medicalInfoService.updateBloodType(id, bloodType), HttpStatus.OK);
     }
 
     @PutMapping("/chronic/{id}")
-    public ResponseEntity<MedicalInfoDto> updateChronicDisease(@PathVariable Long id,String chronicDisease) {
+    public ResponseEntity<MedicalInfoDto> updateChronicDisease(@PathVariable Long id,@RequestBody String chronicDisease) {
         return  new ResponseEntity<>(medicalInfoService.updateChronicDiseases(id, chronicDisease),HttpStatus.OK);
     }
 
     @PutMapping("/allergies/{id}")
-    public ResponseEntity<MedicalInfoDto> updateAllergies(@PathVariable Long id, String allergies) {
+    public ResponseEntity<MedicalInfoDto> updateAllergies(@PathVariable Long id,@RequestBody String allergies) {
         return new ResponseEntity<>(medicalInfoService.updateAllergies(id, allergies),HttpStatus.OK);
     }
 

@@ -18,7 +18,7 @@ public class MedicalInfo {
     @GeneratedValue
     private Long id;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     @Column(name = "blood_type")
     private BloodType bloodType;
 

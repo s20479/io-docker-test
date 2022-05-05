@@ -46,9 +46,9 @@ public class MedicalInfoService {
         medicalInfoRepository.delete(m);
     }
 
-    public MedicalInfoDto updateBloodType(Long medicalInfoId, BloodType bloodType) {
+    public MedicalInfoDto updateBloodType(Long medicalInfoId, String bloodType) {
         MedicalInfo medicalInfo = this.getMedicalInfoById(medicalInfoId);
-        medicalInfo.setBloodType(bloodType);
+        medicalInfo.setBloodType(BloodType.valueOf(bloodType.toUpperCase()));
         medicalInfoRepository.save(medicalInfo);
         return modelMapper.map(medicalInfo,MedicalInfoDto.class);
     }
