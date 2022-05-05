@@ -3,6 +3,8 @@ package com.example.io_backend.service;
 import com.example.io_backend.auth.KeycloakRestTemplate;
 import com.example.io_backend.auth.constants.KeycloakApiConstants;
 import com.example.io_backend.model.Staff;
+import com.example.io_backend.model.dto.representations.RoleRepresentation;
+import com.example.io_backend.model.dto.request.AuthAssignRoleRequest;
 import com.example.io_backend.model.dto.request.CreateStaffUserRequest;
 import com.example.io_backend.model.dto.request.CreateUserRequest;
 import com.example.io_backend.model.dto.request.LoginRequest;
@@ -10,6 +12,7 @@ import com.example.io_backend.model.dto.representations.CredentialsRepresentatio
 import com.example.io_backend.model.dto.representations.UserRepresentation;
 import com.example.io_backend.auth.enums.CredentialType;
 import com.example.io_backend.model.User;
+import com.example.io_backend.repository.StaffRepository;
 import com.example.io_backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +23,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +31,7 @@ import java.util.*;
 public class KeycloakService {
     private final KeycloakRestTemplate keycloakRestTemplate;
     private final UserRepository userRepository;
+    private final StaffRepository staffRepository;
 
     @Value("${KEYCLOAK_URL}")
     private String BASE_URL;
@@ -82,6 +87,73 @@ public class KeycloakService {
         return null;
     }
 
+    public Staff createUser(CreateStaffUserRequest createStaffUserRequest) {
+        UserRepresentation userRepresentation = UserRepresentation
+                .builder()
+                .email(createStaffUserRequest.getEmail())
+                .firstName(createStaffUserRequest.getFirstName())
+                .lastName(createStaffUserRequest.getLastName())
+                .userName(createStaffUserRequest.getUserName())
+                .enabled(true)
+                .credentials(
+                        List.of(
+                                CredentialsRepresentation
+                                        .builder()
+                                        .temporary(false)
+                                        .type(CredentialType.PASSWORD)
+                                        .value(createStaffUserRequest.getPassword())
+                                        .build()
+                        )
+                )
+                .build();
+
+        String URL = KeycloakApiConstants.createURL(BASE_URL + KeycloakApiConstants.USERS,"{REALM}", REALM);
+        ResponseEntity<Void> keycloakResponse = keycloakRestTemplate.postForEntity(URL, userRepresentation, Void.class);
+
+        if (keycloakResponse.getStatusCode() == HttpStatus.CREATED) {
+            log.info("User created");
+            ResponseEntity<UserRepresentation[]> usersResponse = keycloakRestTemplate.getForEntity(URL, UserRepresentation[].class);
+            if (!usersResponse.getStatusCode().is2xxSuccessful()) {
+                throw new RuntimeException("Error creating user!");
+            }
+            var user =  Arrays.stream(Objects.requireNonNull(usersResponse.getBody())).filter(x -> x.equals(userRepresentation)).toList().get(0);
+
+            var roleResponse = keycloakRestTemplate.getForEntity(BASE_URL + KeycloakApiConstants.ROLES, RoleRepresentation[].class);
+            if (!roleResponse.getStatusCode().is2xxSuccessful()) {
+                throw new RuntimeException("Cannot fetch roles");
+            }
+            List<RoleRepresentation> roles = Arrays.asList(Objects.requireNonNull(roleResponse.getBody()));
+            RoleRepresentation role = roles.stream().filter(x -> x.getName().equalsIgnoreCase(createStaffUserRequest.getStaffType().name())).toList().get(0);
+
+            AuthAssignRoleRequest roleRequest = new AuthAssignRoleRequest();
+            roleRequest.setRoleId(role.getId());
+            roleRequest.setRoleName(role.getName());
+
+
+            String url = BASE_URL + KeycloakApiConstants.ROLE_MAPPING;
+            url = url.replace("{USER_ID}", user.getId());
+            url = url.replace("{REALM}", REALM);
+            var response = keycloakRestTemplate.postForEntity(url, List.of(roleRequest), Void.class);
+            if (!response.getStatusCode().is2xxSuccessful()) {
+                throw new RuntimeException("error mapping role to user");
+            }
+
+            Staff staff = new Staff();
+            staff.setStaffType(createStaffUserRequest.getStaffType());
+            staff.setBirthDate(createStaffUserRequest.getBirthDate());
+            staff.setFirstName(createStaffUserRequest.getFirstName());
+            staff.setUserName(createStaffUserRequest.getUserName());
+            staff.setLastName(createStaffUserRequest.getLastName());
+            staff.setId(user.getId());
+            staff.setPhone(createStaffUserRequest.getPhone());
+
+            staff = staffRepository.save(staff);
+
+            return staff;
+        }
+        return null;
+    }
+
     public List<UserRepresentation> getUsers() {
         String URL = KeycloakApiConstants.createURL(BASE_URL + KeycloakApiConstants.USERS,"{REALM}", REALM);
         log.info("Calling: " + URL);
@@ -103,8 +175,4 @@ public class KeycloakService {
         return keycloakRestTemplate.postForAccessToken(loginRequest);
     }
 
-    public Staff createUser(CreateStaffUserRequest createStaffUserRequest) {
-        // todo implement
-        throw new NotImplementedException();
-    }
 }

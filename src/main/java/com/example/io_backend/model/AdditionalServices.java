@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Getter
@@ -21,9 +22,8 @@ public class AdditionalServices {
     @Column(name = "additional_services_type")
     private AdditionalServicesType additionalServicesType;
 
-    @Temporal(TemporalType.DATE)
     @Column(name = "date")
-    private Date date;
+    private LocalDate date;
 
     @Column(name = "justification")
     private String justification;

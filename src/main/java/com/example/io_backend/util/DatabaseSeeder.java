@@ -1,6 +1,7 @@
 package com.example.io_backend.util;
 
 import com.example.io_backend.model.*;
+import com.example.io_backend.model.dto.request.CreateStaffUserRequest;
 import com.example.io_backend.model.dto.request.CreateUserRequest;
 import com.example.io_backend.model.enums.*;
 import com.example.io_backend.repository.*;
@@ -110,7 +111,7 @@ public class DatabaseSeeder implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) {
         seedUsers();
-      if (args.containsOption("seed")) {
+      if (args.getNonOptionArgs().contains("seed")) {
           seedDatabase();
       } else log.info("Database seeding not enabled");
     }
@@ -131,12 +132,25 @@ public class DatabaseSeeder implements ApplicationRunner {
 
             keycloakService.createUser(request);
         }
+        log.info("Creating staff user (dispositor)");
+        CreateStaffUserRequest staffUserRequest = CreateStaffUserRequest
+                .builder()
+                .firstName("test")
+                .lastName("test")
+                .userName("dispositor")
+                .email("test@dispositor.com")
+                .birthDate(LocalDate.now())
+                .phone("123321123")
+                .staffType(StaffType.DISPOSITOR)
+                .password("123")
+                .build();
+        keycloakService.createUser(staffUserRequest);
     }
 
     private void seedDatabase() {
         medicalInfoRepository.saveAll(generateMedicalInfos(entitiesToGenerate));
         //userRepository.saveAll(generateUsers(entitiesToGenerate));
-        staffRepository.saveAll(generateStaff(entitiesToGenerate));
+        //staffRepository.saveAll(generateStaff(entitiesToGenerate));
         victimRepository.saveAll(generateVictims(entitiesToGenerate));
         ambulanceRepository.saveAll(generateAmbulances(entitiesToGenerate));
         tutorialRepository.saveAll(generateTutorials(entitiesToGenerate));
@@ -313,7 +327,7 @@ public class DatabaseSeeder implements ApplicationRunner {
             ReportSurvey rp = new ReportSurvey();
             rp.setBloodType(EnumUtils.randomValue(BloodType.class));
             rp.setId(null);
-            rp.setDate(new Date());
+            rp.setDate(LocalDate.now());
             rp.setDescription("Lorem ipsum");
             rp.setVictimBreathing(ThreadLocalRandom.current().nextBoolean());
             rp.setVictimConscious(ThreadLocalRandom.current().nextBoolean());
@@ -339,7 +353,7 @@ public class DatabaseSeeder implements ApplicationRunner {
                     ambulances.stream()
                             .limit(ThreadLocalRandom.current().nextInt(ambulances.size() - (entitiesToGenerate / 2)))
                             .collect(Collectors.toSet()));
-            a.setDate(new Date());
+            a.setDate(LocalDate.now());
             a.setClosed(ThreadLocalRandom.current().nextBoolean());
             a.setReportSurvey(reportSurveys.get(ThreadLocalRandom.current().nextInt(reportSurveys.size())));
             a.setStaff(staffList.get(ThreadLocalRandom.current().nextInt(staffList.size())));
@@ -360,7 +374,7 @@ public class DatabaseSeeder implements ApplicationRunner {
             as.setId(null);
             as.setAdditionalServicesType(EnumUtils.randomValue(AdditionalServicesType.class));
             as.setJustification("lorem ipsum");
-            as.setDate(new Date());
+            as.setDate(LocalDate.now());
 
             additionalServices.add(as);
         }
