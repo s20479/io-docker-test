@@ -39,7 +39,6 @@ public class EmergencyService {
         User currentUser = userRepository.getById(auth.getName());
 
         AccidentReport report = new AccidentReport();
-        report.setDangerRating(emergencyRequest.getDangerRating());
         report.setClosed(false);
         report.setApproved(false);
         report.setDate(LocalDate.now());
@@ -55,9 +54,8 @@ public class EmergencyService {
         response.setBreathing(survey.getVictimBreathing());
         response.setConscious(survey.getVictimConscious());
         response.setBloodType(survey.getBloodType());
-        response.setDangerRating(report.getDangerRating());
         response.setDate(report.getDate());
-        response.setId(Math.toIntExact(report.getId()));
+        response.setId(report.getId());
         response.setUser(UserDto
                 .builder()
                         .firstName(currentUser.getFirstName())
@@ -84,9 +82,39 @@ public class EmergencyService {
         AccidentReport report = accidentRepository.findById(id.longValue()).orElseThrow(() -> new NotFoundException("Cannot find accident report with that id"));
         report.setAmbulances(new HashSet<>(ambulances));
         report.setApproved(true);
+        report.setDangerRating(request.getDangerRating());
         report.setStaff(loggedStaff);
 
         report = accidentRepository.save(report);
+    }
+
+    public List<EmergencyResponse> getUnapproved() {
+        List<AccidentReport> accidents = accidentRepository.getAccidentReportByApprovedIsFalse();
+        return getEmergencyResponses(accidents);
+    }
+
+    public List<EmergencyResponse> getApproved() {
+        List<AccidentReport> accidents = accidentRepository.getAccidentReportByApprovedIsTrue();
+        return getEmergencyResponses(accidents);
+    }
+
+    private List<EmergencyResponse> getEmergencyResponses(List<AccidentReport> accidents) {
+        List<EmergencyResponse> emergencyResponses = new ArrayList<>();
+
+        for (AccidentReport report : accidents) {
+            EmergencyResponse response = new EmergencyResponse();
+            response.setId(report.getId());
+            response.setDescription(report.getReportSurvey().getDescription());
+            response.setDate(report.getDate());
+            response.setUser(UserDto.of(report.getUser()));
+            response.setConscious(report.getReportSurvey().getVictimConscious());
+            response.setBreathing(report.getReportSurvey().getVictimBreathing());
+            response.setBloodType(report.getReportSurvey().getBloodType());
+
+            emergencyResponses.add(response);
+        }
+
+        return emergencyResponses;
     }
 
     private ReportSurvey getReportSurvey(CreateEmergencyRequest emergencyRequest) {
