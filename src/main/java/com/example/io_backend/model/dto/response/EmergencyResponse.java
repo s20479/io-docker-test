@@ -16,6 +16,6 @@ public class EmergencyResponse {
     private Boolean conscious;
     private BloodType bloodType;
     private LocalDate date;
-    private Integer id;
+    private Long id;
     private UserDto user;
 }
