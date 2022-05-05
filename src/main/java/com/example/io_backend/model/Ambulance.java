@@ -2,18 +2,25 @@ package com.example.io_backend.model;
 
 import com.example.io_backend.model.enums.AmbulanceKind;
 import com.example.io_backend.model.enums.AmbulanceType;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @Getter
 @Setter
 @Table(name = "ambulance")
 @Entity
+@AllArgsConstructor
+@Builder
 public class Ambulance {
+    public Ambulance(){}
+
     @Id
     @GeneratedValue
     @Column(name = "id")
