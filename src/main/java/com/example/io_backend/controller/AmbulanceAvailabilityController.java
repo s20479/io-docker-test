@@ -3,6 +3,8 @@ package com.example.io_backend.controller;
 import com.example.io_backend.model.AmbulanceAvailability;
 import com.example.io_backend.service.AmbulanceAvailabilityService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,28 +16,28 @@ public class AmbulanceAvailabilityController {
     private final AmbulanceAvailabilityService ambulanceAvailabilityService;
 
     @GetMapping("")
-    public List<AmbulanceAvailability> getAll() {
-        return ambulanceAvailabilityService.getAmbulanceAvailabilities();
+    public ResponseEntity<List<AmbulanceAvailability>> getAll() {
+        return new ResponseEntity<>(ambulanceAvailabilityService.getAmbulanceAvailabilities(), HttpStatus.OK) ;
     }
 
     @GetMapping("{id}")
-    public AmbulanceAvailability getById(@PathVariable Long id) {
-        return ambulanceAvailabilityService.getAmbulanceAvailabilityById(id);
+    public ResponseEntity<AmbulanceAvailability> getById(@PathVariable Long id) {
+        return new ResponseEntity<>(ambulanceAvailabilityService.getAmbulanceAvailabilityById(id), HttpStatus.OK);
     }
 
     @PostMapping("")
-    public AmbulanceAvailability add(@RequestBody AmbulanceAvailability ambulanceAvailability) {
-        return ambulanceAvailabilityService.addAmbulanceAvailibility(ambulanceAvailability);
+    public ResponseEntity<AmbulanceAvailability> add(@RequestBody AmbulanceAvailability ambulanceAvailability) {
+        return new ResponseEntity<>(ambulanceAvailabilityService.addAmbulanceAvailability(ambulanceAvailability), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
     public void update(@RequestBody AmbulanceAvailability ambulanceAvailability,@PathVariable Long id){
-        ambulanceAvailabilityService.updateAmbulanceAvailibility(ambulanceAvailability, id);
+        ambulanceAvailabilityService.updateAmbulanceAvailability(ambulanceAvailability, id);
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
-        ambulanceAvailabilityService.deleteAmbulanceAvailibility(id);
+        ambulanceAvailabilityService.deleteAmbulanceAvailability(id);
     }
 
 }

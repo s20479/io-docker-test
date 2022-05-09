@@ -22,11 +22,11 @@ public class AmbulanceAvailabilityService {
         return ambulanceAvailabilityRepository.findById(id).orElseThrow(()-> new NotFoundException("No record with that ID"));
     }
 
-    public AmbulanceAvailability addAmbulanceAvailibility(AmbulanceAvailability ambulanceAvailability){
+    public AmbulanceAvailability addAmbulanceAvailability(AmbulanceAvailability ambulanceAvailability){
         return ambulanceAvailabilityRepository.save(ambulanceAvailability);
     }
 
-    public void updateAmbulanceAvailibility(AmbulanceAvailability ambulanceAvailability, Long id) {
+    public void updateAmbulanceAvailability(AmbulanceAvailability ambulanceAvailability, Long id) {
         var a = ambulanceAvailabilityRepository.findById(id).orElseThrow(()-> new NotFoundException("No record with that ID"));
 
         a.setId(ambulanceAvailability.getId());
@@ -39,7 +39,7 @@ public class AmbulanceAvailabilityService {
         ambulanceAvailabilityRepository.save(a);
     }
 
-    public void deleteAmbulanceAvailibility(Long id) {
+    public void deleteAmbulanceAvailability(Long id) {
         var a = ambulanceAvailabilityRepository.findById(id).orElseThrow(()-> new NotFoundException("No record with that ID"));
 
         ambulanceAvailabilityRepository.delete(a);
