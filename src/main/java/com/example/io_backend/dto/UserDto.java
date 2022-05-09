@@ -1,20 +1,37 @@
 package com.example.io_backend.dto;
 
 import com.example.io_backend.model.MedicalInfo;
-import lombok.Data;
+import com.example.io_backend.model.User;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.*;
 
-import java.time.LocalDate;
 import java.util.Date;
 
-@Data
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDto {
-    private Integer id;
-    private String firstName;
-    private String lastName;
-    private String password;
-    private String email;
-    private LocalDate birthDate;
-    private String phone;
-    private String bandCode;
-    private MedicalInfo medicalInfo;
+    String id;
+    String firstName;
+    String lastName;
+    String password;
+    String email;
+    Date birthDate;
+    String phone;
+    String bandCode;
+    MedicalInfo medicalInfo;
+
+    public static UserDto of(User user) {
+        UserDto userDto = new UserDto();
+        userDto.setId(user.getId());
+        userDto.setEmail(userDto.getEmail());
+        userDto.setFirstName(user.getFirstName());
+        userDto.setLastName(user.getLastName());
+        userDto.setPhone(user.getPhone());
+
+        return userDto;
+    }
 }
