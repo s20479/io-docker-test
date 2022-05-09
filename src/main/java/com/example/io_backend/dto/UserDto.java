@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
 import java.util.Date;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -19,7 +20,7 @@ public class UserDto {
     String lastName;
     String password;
     String email;
-    Date birthDate;
+    LocalDate birthDate;
     String phone;
     String bandCode;
     MedicalInfo medicalInfo;
