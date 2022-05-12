@@ -35,8 +35,17 @@ public class CommentService {
             throw new RuntimeException("Couldn't find comment by ID: " + commentId);
         }
 
+        boolean updateAverage = false;
+        if(comment.getGrade() != commentDto.getGrade()) {
+            updateAverage = true;
+        }
+
         comment.setContents(commentDto.getContents());
         comment.setGrade(commentDto.getGrade());
+        if(updateAverage) {
+            var average = commentRepository.getAllByTutorial(comment.getTutorial()).stream().mapToDouble(it -> it.getGrade()).average();
+            comment.getTutorial().setAverage(average.getAsDouble());
+        }
 
         return mapToDto(commentRepository.save(comment));
     }
