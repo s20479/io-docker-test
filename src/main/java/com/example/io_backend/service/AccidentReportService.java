@@ -3,6 +3,7 @@ package com.example.io_backend.service;
 import com.example.io_backend.exception.NotFoundException;
 import com.example.io_backend.model.AccidentReport;
 import com.example.io_backend.repository.AccidentReportRepository;
+import com.example.io_backend.repository.StaffRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import java.util.List;
 public class AccidentReportService {
 
     private final AccidentReportRepository accidentReportRepository;
+    private final StaffRepository staffRepository;
 
     public List<AccidentReport> getAccidentReports(){
         return accidentReportRepository.findAll();
@@ -23,6 +25,7 @@ public class AccidentReportService {
     }
 
     public AccidentReport addAccidentReport(AccidentReport accidentReport){
+        staffRepository.
         return accidentReportRepository.save(accidentReport);
     }
 

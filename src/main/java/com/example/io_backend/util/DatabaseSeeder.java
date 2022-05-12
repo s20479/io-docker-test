@@ -79,7 +79,7 @@ public class DatabaseSeeder implements ApplicationRunner {
                 .staffType(StaffType.DISPOSITOR)
                 .password("123")
                 .build();
-        keycloakService.createUser(staffUserRequest);
+//        keycloakService.createUser(staffUserRequest);
     }
 
     private void seedDatabase() {

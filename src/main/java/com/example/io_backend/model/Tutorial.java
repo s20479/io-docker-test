@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -25,5 +28,9 @@ public class Tutorial {
 
     @Column(name = "average")
     private Double average;
+
+    @OneToMany
+    @Column(name = "comment")
+    private List<Comment> comments;
 
 }
