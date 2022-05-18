@@ -1,7 +1,6 @@
 package com.example.io_backend.exception;
 
 
-import org.keycloak.authorization.client.util.Http;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -25,7 +24,7 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler(InternalServerErrorException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Map<String, Object> handleError(InternalServerErrorException e) {
         errorMsg.clear();
         errorMsg.put("status", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -35,7 +34,7 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler(NotFoundException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public Map<String, Object> handleError(NotFoundException e) {
         errorMsg.clear();
         errorMsg.put("status", HttpStatus.NOT_FOUND);
