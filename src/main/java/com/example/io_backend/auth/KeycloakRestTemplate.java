@@ -1,6 +1,7 @@
 package com.example.io_backend.auth;
 
 import com.example.io_backend.auth.constants.KeycloakApiConstants;
+import com.example.io_backend.exception.BadRequestException;
 import com.example.io_backend.model.dto.request.LoginRequest;
 import com.example.io_backend.model.dto.representations.TokenRepresentation;
 import com.example.io_backend.auth.enums.OAuth2GrantType;
@@ -11,6 +12,7 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
@@ -34,7 +36,15 @@ public class KeycloakRestTemplate {
     public <T> ResponseEntity<T> postForEntity(String url, Object body, Class<T> responseType) {
         HttpEntity<?> httpEntity = new HttpEntity<>(body, getAuthorizationHeader());
 
-        return restTemplate.postForEntity(url, httpEntity, responseType);
+        ResponseEntity<T> r;
+
+        try {
+            r = restTemplate.postForEntity(url, httpEntity, responseType);
+        } catch (HttpClientErrorException.Conflict e) {
+            throw new BadRequestException("User exists with same username");
+        }
+
+        return r;
     }
 
     public <T> ResponseEntity<T> getForEntity(String url, Class<T> responseType) {

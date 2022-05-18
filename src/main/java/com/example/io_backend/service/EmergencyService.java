@@ -2,6 +2,7 @@ package com.example.io_backend.service;
 
 import com.example.io_backend.dto.UserDto;
 import com.example.io_backend.exception.BadRequestException;
+import com.example.io_backend.exception.HttpException;
 import com.example.io_backend.exception.NotFoundException;
 import com.example.io_backend.model.*;
 import com.example.io_backend.model.dto.request.ApproveEmergencyRequest;
@@ -9,6 +10,8 @@ import com.example.io_backend.model.dto.request.CreateEmergencyRequest;
 import com.example.io_backend.model.dto.response.EmergencyResponse;
 import com.example.io_backend.repository.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,6 +25,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class EmergencyService {
     private final AccidentReportRepository accidentRepository;
     private final ReportSurveyRepository surveyRepository;
@@ -36,6 +40,7 @@ public class EmergencyService {
 
         survey =  surveyRepository.save(survey);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        log.error(auth.getName());
         User currentUser = userRepository.getById(auth.getName());
 
         AccidentReport report = new AccidentReport();
@@ -77,7 +82,7 @@ public class EmergencyService {
         }
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Staff loggedStaff = staffRepository.getById(auth.getName());
+        Staff loggedStaff = staffRepository.getByUser_Id(auth.getName());
 
         AccidentReport report = accidentRepository.findById(id.longValue()).orElseThrow(() -> new NotFoundException("Cannot find accident report with that id"));
         report.setAmbulances(new HashSet<>(ambulances));

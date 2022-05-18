@@ -26,7 +26,7 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User getUserById(Integer userId) {
+    public User getUserById(String userId) {
         return userRepository.findById(userId).orElseThrow(() -> new NotFoundException("No record with that id"));
     }
 
@@ -34,7 +34,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public void updateUser(User user, Integer userId) {
+    public void updateUser(User user, String userId) {
         var p = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
         p.setId(user.getId());
         p.setLastName(user.getLastName());
@@ -47,19 +47,19 @@ public class UserService {
         userRepository.save(p);
     }
 
-    public void deleteUser(Integer userId) {
+    public void deleteUser(String userId) {
         var p = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Person not found"));
         userRepository.delete(p);
     }
 
-    public UserMedicalInfoDto addUserMedicalInfo(Integer userId,@NotNull MedicalInfo medicalInfo) {
+    public UserMedicalInfoDto addUserMedicalInfo(String userId,@NotNull MedicalInfo medicalInfo) {
             User user = this.getUserById(userId);
             medicalInfoService.addMedicalInfo(medicalInfo);
             user.setMedicalInfo(medicalInfo);
         return modelMapper.map(user,UserMedicalInfoDto.class);
     }
 
-    public UserMedicalInfoDto updateUserMedicalInfo(Integer userId, MedicalInfo medicalInfo ) {
+    public UserMedicalInfoDto updateUserMedicalInfo(String userId, MedicalInfo medicalInfo ) {
         User user = this.getUserById(userId);
         medicalInfoService.updateMedicalInfo(medicalInfo,user.getMedicalInfo().getId());
         return modelMapper.map(user,UserMedicalInfoDto.class);
