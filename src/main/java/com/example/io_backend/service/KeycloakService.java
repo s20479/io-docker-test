@@ -2,6 +2,8 @@ package com.example.io_backend.service;
 
 import com.example.io_backend.auth.KeycloakRestTemplate;
 import com.example.io_backend.auth.constants.KeycloakApiConstants;
+import com.example.io_backend.exception.BadRequestException;
+import com.example.io_backend.exception.InternalServerErrorException;
 import com.example.io_backend.model.Staff;
 import com.example.io_backend.model.dto.representations.RoleRepresentation;
 import com.example.io_backend.model.dto.request.AuthAssignRoleRequest;
@@ -16,14 +18,12 @@ import com.example.io_backend.repository.StaffRepository;
 import com.example.io_backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -66,7 +66,7 @@ public class KeycloakService {
             log.info("User created");
             ResponseEntity<UserRepresentation[]> usersResponse = keycloakRestTemplate.getForEntity(URL, UserRepresentation[].class);
             if (!usersResponse.getStatusCode().is2xxSuccessful()) {
-                throw new RuntimeException("Error creating user!");
+                throw new InternalServerErrorException("Error creating user!");
             }
             var user =  Arrays.stream(Objects.requireNonNull(usersResponse.getBody())).filter(x -> x.equals(userRepresentation)).toList().get(0);
 
@@ -83,6 +83,8 @@ public class KeycloakService {
             businessUser = userRepository.save(businessUser);
 
             return businessUser;
+        } else if (keycloakResponse.getStatusCode() == HttpStatus.CONFLICT) {
+            throw new BadRequestException("User exists with same username");
         }
         return null;
     }
@@ -135,21 +137,32 @@ public class KeycloakService {
             url = url.replace("{REALM}", REALM);
             var response = keycloakRestTemplate.postForEntity(url, List.of(roleRequest), Void.class);
             if (!response.getStatusCode().is2xxSuccessful()) {
-                throw new RuntimeException("error mapping role to user");
+                throw new InternalServerErrorException("error mapping role to user");
             }
+
+            User newUser = new User();
+            newUser.setFirstName(createStaffUserRequest.getFirstName());
+            newUser.setLastName(createStaffUserRequest.getLastName());
+            newUser.setBirthDate(createStaffUserRequest.getBirthDate());
+            newUser.setPhone(createStaffUserRequest.getPhone());
+            newUser.setId(user.getId());
+            newUser.setBandCode(null);
+            newUser.setMedicalInfo(null);
+
+            newUser = userRepository.save(newUser);
 
             Staff staff = new Staff();
             staff.setStaffType(createStaffUserRequest.getStaffType());
             staff.setBirthDate(createStaffUserRequest.getBirthDate());
-            staff.setFirstName(createStaffUserRequest.getFirstName());
-            staff.setUserName(createStaffUserRequest.getUserName());
-            staff.setLastName(createStaffUserRequest.getLastName());
-            staff.setId(user.getId());
+            staff.setId(null);
             staff.setPhone(createStaffUserRequest.getPhone());
+            staff.setUser(newUser);
 
             staff = staffRepository.save(staff);
 
             return staff;
+        } else if (keycloakResponse.getStatusCode() == HttpStatus.CONFLICT) {
+            throw new BadRequestException("User exists with same username");
         }
         return null;
     }

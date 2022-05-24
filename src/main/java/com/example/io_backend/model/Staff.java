@@ -3,6 +3,7 @@ package com.example.io_backend.model;
 import com.example.io_backend.model.enums.StaffType;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -13,17 +14,13 @@ import java.time.LocalDate;
 @Entity
 public class Staff {
     @Id
+    @GeneratedValue
     @Column(name = "id")
-    private String id;
+    private Integer id;
 
-    @Column(name = "first_name")
-    private String firstName;
-
-    @Column(name = "last_name")
-    private String lastName;
-
-    @Column(name = "user_name")
-    private String userName;
+    @OneToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @Column(name = "birth_date")
     private LocalDate birthDate;

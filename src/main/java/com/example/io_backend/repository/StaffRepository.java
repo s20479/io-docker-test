@@ -4,5 +4,6 @@ import com.example.io_backend.model.Staff;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface StaffRepository extends JpaRepository<Staff, Integer> {
-    Staff getById(String id);
+    Staff getById(Integer id);
+    Staff getByUser_Id(String userId);
 }
