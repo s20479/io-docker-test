@@ -1,3 +1,5 @@
+[![Build project on pr and push](https://github.com/pjwstkIOprojekt/backend/actions/workflows/build_on_pr_and_push.yml/badge.svg)](https://github.com/pjwstkIOprojekt/backend/actions/workflows/build_on_pr_and_push.yml)
+
 ### Git workflow
 
 1. Sforkuj to repozytorium
