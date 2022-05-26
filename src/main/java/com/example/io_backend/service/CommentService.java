@@ -35,17 +35,13 @@ public class CommentService {
             throw new RuntimeException("Couldn't find comment by ID: " + commentId);
         }
 
-        boolean updateAverage = false;
-        if(comment.getGrade() != commentDto.getGrade()) {
-            updateAverage = true;
+        int gradeDiff = comment.getGrade() - commentDto.getGrade();
+        if(gradeDiff != 0) {
+            comment.getTutorial().setReviewRatingSum(comment.getTutorial().getReviewRatingSum() + gradeDiff);
         }
 
         comment.setContents(commentDto.getContents());
         comment.setGrade(commentDto.getGrade());
-        if(updateAverage) {
-            var average = commentRepository.getAllByTutorial(comment.getTutorial()).stream().mapToDouble(it -> it.getGrade()).average();
-            comment.getTutorial().setAverage(average.getAsDouble());
-        }
 
         return mapToDto(commentRepository.save(comment));
     }
@@ -66,6 +62,9 @@ public class CommentService {
         comment.setUser(user);
         comment.setContents(commentDto.getContents());
         comment.setGrade(commentDto.getGrade());
+
+        tutorial.setReviewRatingCount(tutorial.getReviewRatingCount() + 1);
+        tutorial.setReviewRatingSum(tutorial.getReviewRatingSum() + comment.getGrade());
 
         return mapToDto(commentRepository.save(comment));
     }

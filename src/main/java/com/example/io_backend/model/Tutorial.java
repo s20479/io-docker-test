@@ -26,8 +26,11 @@ public class Tutorial {
     @Column(name = "tutorial_kind")
     private TutorialKind tutorialKind;
 
-    @Column(name = "average")
-    private Double average;
+    @Column(name = "review_rating_sum")
+    private Integer reviewRatingSum;
+
+    @Column(name = "review_rating_count")
+    private Integer reviewRatingCount;
 
     @OneToMany
     @Column(name = "comment")

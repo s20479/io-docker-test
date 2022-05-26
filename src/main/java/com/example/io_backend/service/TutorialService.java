@@ -29,7 +29,8 @@ public class TutorialService {
     public void updateTutorial(Tutorial tutorial, Long id) {
         var t = tutorialRepository.findById(id).orElseThrow(() -> new NotFoundException("Tutorial not found"));
         t.setId(tutorial.getId());
-        t.setAverage(tutorial.getAverage());
+        t.setReviewRatingCount(tutorial.getReviewRatingCount());
+        t.setReviewRatingSum(tutorial.getReviewRatingSum());
         t.setName(tutorial.getName());
         t.setTutorialKind(tutorial.getTutorialKind());
 
