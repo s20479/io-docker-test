@@ -146,8 +146,7 @@ public class DatabaseSeeder implements ApplicationRunner {
             Staff staff = new Staff();
             staff.setId(null);
             staff.setStaffType(EnumUtils.randomValue(StaffType.class));
-            staff.setFirstName(names.get(ThreadLocalRandom.current().nextInt(names.size())).split(" ")[0]);
-            staff.setLastName(names.get(ThreadLocalRandom.current().nextInt(names.size())).split(" ")[1]);
+
 
             staffList.add(staff);
         }
@@ -247,7 +246,6 @@ public class DatabaseSeeder implements ApplicationRunner {
             f.setFacilityType(EnumUtils.randomValue(FacilityType.class));
             f.setHospitalType(EnumUtils.randomValue(HospitalType.class));
             f.setMaximumBeds(ThreadLocalRandom.current().nextInt(10, 101));
-            f.setSet(null); // ???
 
             facilities.add(f);
         }

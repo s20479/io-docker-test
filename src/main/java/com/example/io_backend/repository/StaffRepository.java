@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface StaffRepository extends JpaRepository<Staff, Integer> {
-    Staff getById(String id);
-    List<Staff> getAllByStaffType(StaffType staffType);
+    Staff getById(Integer id);
+    Staff getByUser_Id(String userId);
 }
+

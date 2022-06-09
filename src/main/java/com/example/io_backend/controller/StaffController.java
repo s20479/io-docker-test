@@ -1,6 +1,7 @@
 package com.example.io_backend.controller;
 
 import com.example.io_backend.model.Staff;
+import com.example.io_backend.model.User;
 import com.example.io_backend.service.StaffService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +28,10 @@ public class StaffController {
     @PostMapping("")
     public Staff add(@RequestBody Staff staff) {
         return staffService.addStaff(staff);
+    }
+
+    public User getUserData(Integer id) {
+        return staffService.getUserData(id);
     }
 
     @PutMapping("/{id}")

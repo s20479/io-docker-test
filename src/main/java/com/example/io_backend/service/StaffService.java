@@ -2,6 +2,7 @@ package com.example.io_backend.service;
 
 import com.example.io_backend.exception.NotFoundException;
 import com.example.io_backend.model.Staff;
+import com.example.io_backend.model.User;
 import com.example.io_backend.repository.StaffRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,10 @@ public class StaffService {
         return staffRepository.findById(id).orElseThrow(() -> new NotFoundException("No record with that id"));
     }
 
+    public User getUserData(Integer id) {
+        return staffRepository.getById(id).getUser();
+    }
+
     public Staff addStaff(Staff staff) {
         return staffRepository.save(staff);
     }
@@ -29,8 +34,6 @@ public class StaffService {
     public void updateStaff(Staff staff, Integer id) {
         var s = staffRepository.findById(id).orElseThrow(() -> new NotFoundException("Staff member not found"));
         s.setId(staff.getId());
-        s.setFirstName(staff.getFirstName());
-        s.setLastName(staff.getLastName());
         s.setStaffType(staff.getStaffType());
 
         staffRepository.save(s);
