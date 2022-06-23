@@ -9,5 +9,6 @@ import java.util.List;
 public interface StaffRepository extends JpaRepository<Staff, Integer> {
     Staff getById(Integer id);
     Staff getByUser_Id(String userId);
+    List<Staff> getAllByStaffType(StaffType type);
 }
 
