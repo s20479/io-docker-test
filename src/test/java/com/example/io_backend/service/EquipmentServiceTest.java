@@ -35,7 +35,7 @@ class EquipmentServiceTest {
 
     @Test
     void getEquipmentById() {
-        when(equipmentRepository.findById(any(Long.class))).thenReturn(Optional.of(new Equipment(1L, "eq1")));
+        when(equipmentRepository.findById(any(Long.class))).thenReturn(Optional.of(new Equipment(1L, "eq1", null)));
 
         var result = equipmentService.getEquipmentById(1L);
 
@@ -46,7 +46,7 @@ class EquipmentServiceTest {
     @Test
     void getEquipmentByName() {
         var expected = new EquipmentResponse("eq1");
-        when(equipmentRepository.getEquipmentByName(any(String.class))).thenReturn(List.of(new Equipment(1L, "eq1")));
+        when(equipmentRepository.getEquipmentByName(any(String.class))).thenReturn(List.of(new Equipment(1L, "eq1", null)));
 
         var result = equipmentService.getEquipmentByName("eq1");
 
@@ -73,7 +73,7 @@ class EquipmentServiceTest {
 
         var expected = new EquipmentResponse(dto.getName());
 
-        when(equipmentRepository.findById(any(Long.class))).thenReturn(Optional.of(new Equipment(id, "eq1")));
+        when(equipmentRepository.findById(any(Long.class))).thenReturn(Optional.of(new Equipment(id, "eq1", null)));
         when(equipmentRepository.save(any(Equipment.class))).thenAnswer(x -> x.getArguments()[0]);
 
         var result = equipmentService.updateEquipment(dto, id);
@@ -94,9 +94,9 @@ class EquipmentServiceTest {
 
     private List<Equipment> getEquipmentTestData() {
         return  List.of(
-                new Equipment(1L, "eq1"),
-                new Equipment(2L, "eq2"),
-                new Equipment(3L, "eq3")
+                new Equipment(1L, "eq1", null),
+                new Equipment(2L, "eq2", null),
+                new Equipment(3L, "eq3", null)
         );
     }
 

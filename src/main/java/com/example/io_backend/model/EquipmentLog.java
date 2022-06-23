@@ -1,8 +1,8 @@
 package com.example.io_backend.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
+import javax.annotation.security.DenyAll;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Date;
@@ -11,6 +11,9 @@ import java.util.Date;
 @Setter
 @Table(name = "equipment_log")
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class EquipmentLog {
     @Id
     @Column(name = "id", nullable = false)

@@ -31,7 +31,7 @@ public class EquipmentService {
     public List<EquipmentResponse> addEquipment(List<EquipmentDto> equipmentRequest) {
         List<Equipment> equipment = new ArrayList<>();
         for (var e : equipmentRequest) {
-            Equipment eq = new Equipment(null, e.getName());
+            Equipment eq = new Equipment(null, e.getName(), null);
             eq = equipmentRepository.save(eq);
             equipment.add(eq);
         }
