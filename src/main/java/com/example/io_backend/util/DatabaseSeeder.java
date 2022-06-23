@@ -341,8 +341,8 @@ public class DatabaseSeeder implements ApplicationRunner {
         for (int i = 0; i < length; i++) {
             DispositorDutyEntry d = new DispositorDutyEntry();
             d.setId(null);
-            d.setDutyStart(Instant.now().getEpochSecond());
-            d.setDutyEnd(Instant.now().getEpochSecond() + (60 * 60 * 8));
+            d.setDutyStart((int) Instant.now().getEpochSecond());
+            d.setDutyEnd((int) (Instant.now().getEpochSecond() + (60 * 60 * 8)));
             d.setComment("comment " + i);
             d.setStaff(staff.get(ThreadLocalRandom.current().nextInt(staff.size())));
 

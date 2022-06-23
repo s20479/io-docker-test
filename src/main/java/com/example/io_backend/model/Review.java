@@ -13,7 +13,7 @@ public class Review {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue
-    private Long id;
+    private Integer id;
 
     @Column(name = "rating")
     private Integer rating;

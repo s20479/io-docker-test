@@ -15,7 +15,7 @@ public class AdditionalServices {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue
-    private Long id;
+    private Integer id;
 
     @Enumerated
     @Column(name = "additional_services_type")

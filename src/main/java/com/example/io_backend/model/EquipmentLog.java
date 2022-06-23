@@ -8,16 +8,16 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "equipment_log")
 @Entity
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class EquipmentLog {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue
-    private Long id;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "equipment_id")

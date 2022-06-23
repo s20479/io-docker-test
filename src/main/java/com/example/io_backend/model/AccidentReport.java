@@ -16,7 +16,7 @@ public class AccidentReport {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue
-    private Long id;
+    private Integer id;
 
     @Column(name = "danger_rating")
     private Short dangerRating;

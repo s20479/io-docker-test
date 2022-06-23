@@ -13,7 +13,7 @@ public class Location {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue
-    private Long id;
+    private Integer id;
 
     @Column(name = "longitude")
     private Double longitude;

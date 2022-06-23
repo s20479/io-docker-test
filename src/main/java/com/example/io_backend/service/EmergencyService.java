@@ -84,7 +84,7 @@ public class EmergencyService {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Staff loggedStaff = staffRepository.getByUser_Id(auth.getName());
 
-        AccidentReport report = accidentRepository.findById(id.longValue()).orElseThrow(() -> new NotFoundException("Cannot find accident report with that id"));
+        AccidentReport report = accidentRepository.findById(id).orElseThrow(() -> new NotFoundException("Cannot find accident report with that id"));
         report.setAmbulances(new HashSet<>(ambulances));
         report.setApproved(true);
         report.setDangerRating(request.getDangerRating());

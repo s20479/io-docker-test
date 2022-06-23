@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @Data
 public class AmbulanceAvailabilityDto {
 
-    private Long id;
+    private Integer id;
     private Ambulance ambulance;
     private AvailabilityType availabilityType;
     private LocalDate dateStart;
