@@ -97,7 +97,6 @@ public class DatabaseSeeder implements ApplicationRunner {
         additionalServicesRepository.saveAll(generateAdditionalServices(entitiesToGenerate));
         dispositorDutyEntryRepository.saveAll(generateDispositorDuties(entitiesToGenerate));
         ambulanceAvailabilityRepository.saveAll(generateAmbulanceAvailability(entitiesToGenerate));
-        locationRepository.saveAll(generateLocations(entitiesToGenerate));
         equipmentLogRepository.saveAll(generateEquipmentLog(entitiesToGenerate));
 
         log.info("Database seeding finished");
@@ -350,21 +349,6 @@ public class DatabaseSeeder implements ApplicationRunner {
         }
 
         return dispositorDutyEntries;
-    }
-
-    private List<Location> generateLocations(int length) {
-        List<Location> locations = new ArrayList<>();
-
-        for (int i = 0; i < length; i++) {
-            Location location = new Location();
-            location.setId(null);
-            location.setLatitude(ThreadLocalRandom.current().nextDouble(-90, 90));
-            location.setLongitude(ThreadLocalRandom.current().nextDouble(-180, 180));
-
-            locations.add(location);
-        }
-
-        return locations;
     }
 
     private List<EquipmentLog> generateEquipmentLog(int length) {

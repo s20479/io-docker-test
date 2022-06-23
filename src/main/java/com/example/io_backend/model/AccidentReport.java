@@ -38,6 +38,10 @@ public class AccidentReport {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @OneToOne
+    @JoinColumn(name = "location_id")
+    private Location location;
+
     @ManyToMany
     @JoinTable(name = "accident_report_ambulances",
             joinColumns = @JoinColumn(name = "accident_report_id"),
