@@ -5,7 +5,6 @@ import lombok.*;
 import javax.annotation.security.DenyAll;
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Getter
 @Setter
