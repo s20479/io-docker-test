@@ -17,7 +17,7 @@ public class Equipment {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue
-    private Long id;
+    private Integer id;
 
     @Column(name = "name")
     private String name;

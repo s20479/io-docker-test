@@ -26,7 +26,7 @@ public class AccidentReportService {
         return accidentReportRepository.findAll();
     }
 
-    public AccidentReport getAccidentReportById(Long id){
+    public AccidentReport getAccidentReportById(Integer id){
         return accidentReportRepository.findById(id).orElseThrow(()-> new NotFoundException("No record with that ID"));
     }
 
@@ -48,7 +48,7 @@ public class AccidentReportService {
         return accidentReportRepository.save(accidentReport);
     }
 
-    public void updateAccidentReport(AccidentReport accidentReport, Long id) {
+    public void updateAccidentReport(AccidentReport accidentReport, Integer id) {
         var a = accidentReportRepository.findById(id).orElseThrow(()-> new NotFoundException("No record with that ID"));
 
         a.setId(accidentReport.getId());
@@ -62,7 +62,7 @@ public class AccidentReportService {
         accidentReportRepository.save(a);
     }
 
-    public void deleteAccidentReport(Long id) {
+    public void deleteAccidentReport(Integer id) {
         var a = accidentReportRepository.findById(id).orElseThrow(()-> new NotFoundException("No record with that ID"));
 
         accidentReportRepository.delete(a);
